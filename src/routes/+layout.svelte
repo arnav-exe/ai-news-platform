@@ -10,6 +10,8 @@
 	const btnHandler = _ => {
 		console.log("clicked")
 	}
+	
+	let valueSingle = "books";
 </script>
 
 <!-- App Shell -->
@@ -22,7 +24,7 @@
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
 				<LightSwitch />
-				<button on:click={btnHandler}><Avatar initials="AJ" background="bg-primary-500" /></button>
+				<button on:click={btnHandler}><Avatar initials="AJ" background="bg-primary-500" /></button>							
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>

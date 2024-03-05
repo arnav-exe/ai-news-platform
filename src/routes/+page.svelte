@@ -2,7 +2,7 @@
 
 
 <div class="container h-full mx-auto flex justify-center items-center">
-	<a class="card card-hover overflow-hidden" href="/elements/cards">
+	<a class="card card-hover overflow-hidden" href="#">
 		<header>
 			<img src="https://www.unsplash.it/400/175" class="bg-black/50 w-full aspect-[21/9]" alt="Post" />
 		</header>
