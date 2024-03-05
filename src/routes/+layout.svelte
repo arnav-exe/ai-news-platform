@@ -7,7 +7,7 @@
 	import { storePopup } from '@skeletonlabs/skeleton';
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 
-	const handler = _ => {
+	const btnHandler = _ => {
 		console.log("clicked")
 	}
 </script>
@@ -22,7 +22,7 @@
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
 				<LightSwitch />
-				<button on:click={handler}><Avatar initials="AJ" background="bg-primary-500" /></button>
+				<button on:click={btnHandler}><Avatar initials="AJ" background="bg-primary-500" /></button>
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
