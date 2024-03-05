@@ -10,11 +10,13 @@
         const response = await fetch(url);
         const json = await response.json();
         articles = json["articles"];
+
+        console.table(articles)
     });
 </script>
 
 {#each articles as article}
-    <a class="card card-hover overflow-hidden" href="{article.url}">
+    <!-- <a class="card card-hover overflow-hidden" href="{article.url}">
 		<header>
 			<img src="{article.urlToImage}" class="bg-black/50 w-full aspect-[21/9]" alt="article thumbnail" />
 		</header>
@@ -28,9 +30,11 @@
 		<hr class="opacity-50" />
 		<footer class="p-4 flex justify-start items-center space-x-4">
 			<div class="flex-auto flex justify-between items-center">
-				<h6 class="font-bold" data-toc-ignore>By Author Name</h6>
-				<small>Published: dd/mm/yyyy</small>
+				<h6 class="font-bold" data-toc-ignore>By {article.author}</h6>
+				<small>Published: {article.publishedAt.slice(0, 10)}</small>
 			</div>
 		</footer>
-	</a>
+	</a> -->
+
+    <img src="{article.urlToImage}" alt="article thumbnail">
 {/each}
