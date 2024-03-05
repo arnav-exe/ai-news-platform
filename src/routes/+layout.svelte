@@ -1,11 +1,15 @@
 <script>
 	import '../app.postcss';
-	import { AppShell, AppBar, Avatar } from '@skeletonlabs/skeleton';
+	import { AppShell, AppBar, Avatar, LightSwitch } from '@skeletonlabs/skeleton';
 
 	// Floating UI for Popups
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
 	import { storePopup } from '@skeletonlabs/skeleton';
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
+
+	const handler = _ => {
+		console.log("clicked")
+	}
 </script>
 
 <!-- App Shell -->
@@ -17,7 +21,8 @@
 				<strong class="text-xl uppercase">TL;DR NEWS</strong>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
-				<Avatar initials="AJ" />
+				<LightSwitch />
+				<button on:click={handler}><Avatar initials="AJ" background="bg-primary-500" /></button>
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>

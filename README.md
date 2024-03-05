@@ -4,4 +4,5 @@
  * Svelte
  * SkeletonUI
  * Firebase
+ * Tailwind
  * Vite
