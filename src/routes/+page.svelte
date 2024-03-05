@@ -1,6 +1,3 @@
-
-
-
 <div class="container h-full mx-auto flex justify-center items-center">
 	<a class="card card-hover overflow-hidden" href="#">
 		<header>
