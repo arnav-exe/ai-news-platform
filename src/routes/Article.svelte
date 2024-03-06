@@ -3,6 +3,7 @@
     import { Drawer, getDrawerStore, initializeStores } from '@skeletonlabs/skeleton';
     import Page from "./+page.svelte";
 
+    import json from './data.json'
 
     const API_KEY = import.meta.env.VITE_NEWSAPI_KEY;
     const url = `https://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey=${API_KEY}`;
@@ -10,9 +11,10 @@
     let articles = [];
 
     onMount(async _ => {
-        const response = await fetch(url);
-        const json = await response.json();
-        articles = json["articles"];
+        // const response = await fetch(url);
+        // let json = await response.json();
+
+        articles = json["articles"]; // uses dummy data imported from "data.json"
     });
 
     initializeStores();
@@ -20,7 +22,8 @@
 
     const drawerSettings = {
         position: "bottom",
-        height: "h-4/5" //80%vh
+        height: "h-4/5", //80%vh
+        meta: {hello: "world"}
     }
 
 
@@ -32,7 +35,7 @@
 <Drawer />
 
 {#each articles as article}
-    <button style="all:unset" on:click={openDrawer}>
+    <button style="all:unset" on:click={openDrawer}> {$drawerStore.meta}
     <div class="card card-hover overflow-hidden">
     <!-- <a class="card card-hover overflow-hidden" href="{article.url}"> -->
 		<header>

@@ -1,0 +1,106 @@
+{
+    "status": "ok",
+    "totalResults": 10,
+    "articles": [
+        {
+            "title": "Colin Firth's wet shirt from Pride and Prejudice goes up for auction",
+            "author": "BBC News",
+            "source": {
+                "id": "bbc-news",
+                "name": "BBC News"
+            },
+            "publishedAt": "2024-03-05T17:52:19.753483Z",
+            "url": "https://www.bbc.co.uk/news/entertainment-arts-68415018"
+        },
+        {
+            "title": "Grandmother gets $3.7m over false Find My iPhone raid",
+            "author": "BBC News",
+            "source": {
+                "id": "bbc-news",
+                "name": "BBC News"
+            },
+            "publishedAt": "2024-03-05T17:52:17.8164621Z",
+            "url": "https://www.bbc.co.uk/news/world-us-canada-68482374"
+        },
+        {
+            "title": "Taylor Swift urges voters to the polls ahead of Super Tuesday",
+            "author": "BBC News",
+            "source": {
+                "id": "bbc-news",
+                "name": "BBC News"
+            },
+            "publishedAt": "2024-03-05T17:37:15.9113627Z",
+            "url": "https://www.bbc.co.uk/news/world-us-canada-68482442"
+        },
+        {
+            "title": "ICC issues arrest warrants for top Russian commanders",
+            "author": "BBC News",
+            "source": {
+                "id": "bbc-news",
+                "name": "BBC News"
+            },
+            "publishedAt": "2024-03-05T16:37:18.4255935Z",
+            "url": "https://www.bbc.co.uk/news/world-europe-68483012"
+        },
+        {
+            "title": "Facebook and Instagram down in apparent global outage",
+            "author": "BBC News",
+            "source": {
+                "id": "bbc-news",
+                "name": "BBC News"
+            },
+            "publishedAt": "2024-03-05T16:37:15.3390934Z",
+            "url": "https://www.bbc.co.uk/news/technology-68483732"
+        },
+        {
+            "title": "Far-left group says it targeted Tesla in German arson attack",
+            "author": "BBC News",
+            "source": {
+                "id": "bbc-news",
+                "name": "BBC News"
+            },
+            "publishedAt": "2024-03-05T16:22:17.3330943Z",
+            "url": "https://www.bbc.co.uk/news/technology-68479242"
+        },
+        {
+            "title": "Crucial Red Sea data cables cut, telecoms firm says",
+            "author": "BBC News",
+            "source": {
+                "id": "bbc-news",
+                "name": "BBC News"
+            },
+            "publishedAt": "2024-03-05T15:37:23.2531581Z",
+            "url": "https://www.bbc.co.uk/news/world-middle-east-68478828"
+        },
+        {
+            "title": "Haiti gangs try to take over Port-au-Prince airport",
+            "author": "BBC News",
+            "source": {
+                "id": "bbc-news",
+                "name": "BBC News"
+            },
+            "publishedAt": "2024-03-05T14:52:19.2691707Z",
+            "url": "https://www.bbc.co.uk/news/world-latin-america-68478718"
+        },
+        {
+            "title": "Super Tuesday: Four things to watch out for as Americans vote",
+            "author": "BBC News",
+            "source": {
+                "id": "bbc-news",
+                "name": "BBC News"
+            },
+            "publishedAt": "2024-03-05T14:22:17.409852Z",
+            "url": "https://www.bbc.co.uk/news/world-us-canada-68472306"
+        },
+        {
+            "title": "Ukraine war: Russian Black Sea fleet ship damaged in drone attack, Kyiv says",
+            "author": "BBC News",
+            "source": {
+                "id": "bbc-news",
+                "name": "BBC News"
+            },
+            "publishedAt": "2024-03-05T09:37:14.3475556Z",
+            "url": "https://www.bbc.co.uk/news/world-europe-68477318"
+        }
+    ]
+}
