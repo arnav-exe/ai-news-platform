@@ -1,5 +1,8 @@
 <script>
     import { onMount } from "svelte";
+    import { Drawer, getDrawerStore, initializeStores } from '@skeletonlabs/skeleton';
+    import Page from "./+page.svelte";
+
 
     const API_KEY = import.meta.env.VITE_NEWSAPI_KEY;
     const url = `https://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey=${API_KEY}`;
@@ -10,22 +13,34 @@
         const response = await fetch(url);
         const json = await response.json();
         articles = json["articles"];
-
-        console.table(articles)
     });
+
+    initializeStores();
+    const drawerStore = getDrawerStore();
+
+    const drawerSettings = {
+        position: "bottom",
+        height: "h-4/5" //80%vh
+    }
+
+
+    const openDrawer = _ => {
+        drawerStore.open(drawerSettings);
+    }
 </script>
 
+<Drawer />
+
 {#each articles as article}
-    <!-- <a class="card card-hover overflow-hidden" href="{article.url}">
+    <button style="all:unset" on:click={openDrawer}>
+    <div class="card card-hover overflow-hidden">
+    <!-- <a class="card card-hover overflow-hidden" href="{article.url}"> -->
 		<header>
 			<img src="{article.urlToImage}" class="bg-black/50 w-full aspect-[21/9]" alt="article thumbnail" />
 		</header>
 		<div class="p-4 space-y-4">
 			<img src="../../../bbc.png" class="max-w-12 h-auto" alt="BBC">
 			<h3 class="h3" data-toc-ignore>{article.title}</h3>
-			<article>
-				<p>{article.description}</p>
-			</article>
 		</div>
 		<hr class="opacity-50" />
 		<footer class="p-4 flex justify-start items-center space-x-4">
@@ -34,7 +49,9 @@
 				<small>Published: {article.publishedAt.slice(0, 10)}</small>
 			</div>
 		</footer>
-	</a> -->
+	<!-- </a> -->
+</div>
+</button>
 
-    <img src="{article.urlToImage}" alt="article thumbnail">
+    <!-- <img src="{article.urlToImage}" alt="article thumbnail"> -->
 {/each}
