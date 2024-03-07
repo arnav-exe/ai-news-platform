@@ -1,9 +1,9 @@
 <script>
     import { onMount } from "svelte";
     import { Drawer, getDrawerStore, initializeStores } from '@skeletonlabs/skeleton';
-    import Page from "./+page.svelte";
 
     import json from './data.json'
+    import { articleScrape } from "./scaper.js"
 
     const API_KEY = import.meta.env.VITE_NEWSAPI_KEY;
     const url = `https://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey=${API_KEY}`;
@@ -15,6 +15,8 @@
         // let json = await response.json();
 
         articles = json["articles"]; // uses dummy data imported from "data.json"
+    
+        articleScrape(); // NOT WORKING RN
     });
 
     initializeStores();
@@ -33,6 +35,7 @@
 </script>
 
 <div class="container">
+    
 
 
 
