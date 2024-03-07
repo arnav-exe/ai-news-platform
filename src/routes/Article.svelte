@@ -20,24 +20,20 @@
     initializeStores();
     const drawerStore = getDrawerStore();
 
-    const drawerSettings = {
-        position: "bottom",
-        height: "h-4/5", //80%vh
-        meta: {hello: "world"}
-    }
+    
 
-
-    const openDrawer = _ => {
+    const openArticle = _ => {
+        const drawerSettings = {
+            position: "bottom",
+            height: "h-4/5", //80%vh
+        }
         drawerStore.open(drawerSettings);
     }
 </script>
 
-<Drawer />
-
 {#each articles as article}
-    <button style="all:unset" on:click={openDrawer}> {$drawerStore.meta}
+    <button class="container p-10" on:click={openArticle}>
     <div class="card card-hover overflow-hidden">
-    <!-- <a class="card card-hover overflow-hidden" href="{article.url}"> -->
 		<header>
 			<img src="{article.urlToImage}" class="bg-black/50 w-full aspect-[21/9]" alt="article thumbnail" />
 		</header>
@@ -52,9 +48,16 @@
 				<small>Published: {article.publishedAt.slice(0, 10)}</small>
 			</div>
 		</footer>
-	<!-- </a> -->
-</div>
+    </div>
 </button>
 
-    <!-- <img src="{article.urlToImage}" alt="article thumbnail"> -->
+<Drawer>
+    <div class="container h-full mx-auto flex p-1">
+        <h3 class="h3">{article.title}</h3>
+        <img src="{article.urlToImage}" alt="article thumbnail">
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt ullam enim quasi id in explicabo quas! Quae saepe illum neque odio vel sit odit non, similique necessitatibus repellat qui veritatis.</p>
+    </div>
+</Drawer>
+
 {/each}
+
