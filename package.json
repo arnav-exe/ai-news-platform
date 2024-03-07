@@ -29,6 +29,7 @@
   "dependencies": {
     "@floating-ui/dom": "1.6.3",
     "dotenv": "^16.4.5",
-    "newsapi": "^2.4.1"
+    "newsapi": "^2.4.1",
+    "puppeteer": "^22.4.0"
   }
 }

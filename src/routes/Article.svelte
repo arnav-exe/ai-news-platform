@@ -8,7 +8,7 @@
     const API_KEY = import.meta.env.VITE_NEWSAPI_KEY;
     const url = `https://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey=${API_KEY}`;
     
-    let articles = [];
+    export let articles = [];
 
     onMount(async _ => {
         // const response = await fetch(url);
@@ -20,7 +20,7 @@
     initializeStores();
     const drawerStore = getDrawerStore();
 
-    
+    export let drawerSettings = {};
 
     const openArticle = _ => {
         const drawerSettings = {
@@ -32,7 +32,6 @@
     }
 </script>
 
-<!-- <div class="container flex justify-center align-start"> -->
 <div class="container">
 
 
