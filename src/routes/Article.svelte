@@ -25,15 +25,33 @@
     const openArticle = _ => {
         const drawerSettings = {
             position: "bottom",
-            height: "h-4/5", //80%vh
+            height: "h-[90vh]", //90%vh
+            meta: {articleTitle: "hello", articleSummary: " world"}
         }
         drawerStore.open(drawerSettings);
     }
 </script>
 
-{#each articles as article}
-    <button class="container p-10" on:click={openArticle}>
-    <div class="card card-hover overflow-hidden">
+<!-- <div class="container flex justify-center align-start"> -->
+<div class="container">
+
+
+
+    <button on:click={openArticle}>CLICK ME
+        <Drawer>
+            <!-- <div class="container h-full mx-auto flex p-1">
+                <h3 class="h3">{article.title}</h3>
+                <img src="{article.urlToImage}" alt="article thumbnail">
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt ullam enim quasi id in explicabo quas! Quae saepe illum neque odio vel sit odit non, similique necessitatibus repellat qui veritatis.</p>
+            </div> -->
+            <div>{$drawerStore["meta"]["articleTitle"]}</div>
+        </Drawer>
+        </button>
+
+
+
+    {#each articles as article}
+    <div class="card card-hover overflow-hidden m-8">
 		<header>
 			<img src="{article.urlToImage}" class="bg-black/50 w-full aspect-[21/9]" alt="article thumbnail" />
 		</header>
@@ -49,15 +67,6 @@
 			</div>
 		</footer>
     </div>
-</button>
-
-<Drawer>
-    <div class="container h-full mx-auto flex p-1">
-        <h3 class="h3">{article.title}</h3>
-        <img src="{article.urlToImage}" alt="article thumbnail">
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt ullam enim quasi id in explicabo quas! Quae saepe illum neque odio vel sit odit non, similique necessitatibus repellat qui veritatis.</p>
-    </div>
-</Drawer>
-
 {/each}
 
+</div>
