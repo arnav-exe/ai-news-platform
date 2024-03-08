@@ -15,16 +15,17 @@
         // let json = await response.json();
 
         articles = json["articles"]; // uses dummy data imported from "data.json"
-    
-        articleScrape(); // NOT WORKING RN
     });
 
     initializeStores();
     const drawerStore = getDrawerStore();
 
-    export let drawerSettings = {};
+    let drawerSettings = {};
 
-    const openArticle = _ => {
+    const openArticle = _ => { // button handler function to open article summary inside skeleton drawer
+
+        articleScrape();
+
         const drawerSettings = {
             position: "bottom",
             height: "h-[90vh]", //90%vh
@@ -46,7 +47,10 @@
                 <img src="{article.urlToImage}" alt="article thumbnail">
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt ullam enim quasi id in explicabo quas! Quae saepe illum neque odio vel sit odit non, similique necessitatibus repellat qui veritatis.</p>
             </div> -->
-            <div>{$drawerStore["meta"]["articleTitle"]}</div>
+            <div class="p-4">
+            <h1 class="h1">{$drawerStore["meta"]["articleTitle"]}</h1>
+            <p>{$drawerStore["meta"]["articleSummary"]}</p>
+            </div>
         </Drawer>
         </button>
 
