@@ -36,27 +36,18 @@
 </script>
 
 <div class="container">
-    
-
-
-
-    <button on:click={openArticle}>CLICK ME
+    <!-- article drawer -->
         <Drawer>
-            <!-- <div class="container h-full mx-auto flex p-1">
-                <h3 class="h3">{article.title}</h3>
-                <img src="{article.urlToImage}" alt="article thumbnail">
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt ullam enim quasi id in explicabo quas! Quae saepe illum neque odio vel sit odit non, similique necessitatibus repellat qui veritatis.</p>
-            </div> -->
             <div class="p-4">
             <h1 class="h1">{$drawerStore["meta"]["articleTitle"]}</h1>
             <p>{$drawerStore["meta"]["articleSummary"]}</p>
             </div>
         </Drawer>
-        </button>
 
-
-
+    <!-- article cards -->
+    <div class="grid justify-items-center items-center">
     {#each articles as article}
+    <button on:click={openArticle}>
     <div class="card card-hover overflow-hidden m-8">
 		<header>
 			<img src="{article.urlToImage}" class="bg-black/50 w-full aspect-[21/9]" alt="article thumbnail" />
@@ -73,6 +64,8 @@
 			</div>
 		</footer>
     </div>
+</button>
 {/each}
+</div>
 
 </div>
