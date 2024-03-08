@@ -10,6 +10,7 @@ export const articleScrape = _ => {
     // articles = json["articles"];
     // console.log(articles);
     console.log("hello world");
+    
 };
 
 export default articleScrape;

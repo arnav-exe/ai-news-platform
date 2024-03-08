@@ -46,7 +46,7 @@
 
     <!-- article cards -->
     <div class="grid justify-items-center items-center">
-    {#each articles as article}
+    {#each articles as article (article.id)} <!-- keyed each block to differenciate article data -->
     <button on:click={openArticle}>
     <div class="card card-hover overflow-hidden m-8">
 		<header>
