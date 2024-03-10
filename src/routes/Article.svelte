@@ -3,7 +3,7 @@
     import { Drawer, getDrawerStore, initializeStores } from '@skeletonlabs/skeleton';
 
     import json from './data.json';
-    import articleScrape from "./scraper";
+    import articleScrape from "../../server/scraper";
 
     const API_KEY = import.meta.env.VITE_NEWSAPI_KEY;
     const url = `https://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey=${API_KEY}`;
