@@ -9,6 +9,7 @@
     const url = `https://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey=${API_KEY}`;
     
     let articleBody = "";
+    let articles;
 
     const fetchArticleData = async _ => {
         try {

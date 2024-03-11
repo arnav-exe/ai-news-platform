@@ -1,5 +1,5 @@
-import { express } from "express";
-import articleScrape, { scrapeArticle } from "./scraper";
+import express from "express";
+import scrapeArticle from "./scraper.js";
 
 const app = express();
 const port = 3000;
