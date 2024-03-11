@@ -17,3 +17,12 @@ app.get("/api/article", async(req, res) => {
 app.listen(port, _ => {
     console.log(`Server is running on port ${port}`);
 });
+
+
+
+/*
+TODO:
+1. enable CORS
+2. write image scraper
+3. add firebase backend
+*/
