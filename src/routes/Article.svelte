@@ -3,13 +3,12 @@
     import { Drawer, getDrawerStore, initializeStores } from '@skeletonlabs/skeleton';
 
     import json from './data.json';
-    import { response } from "express";
 
     const API_KEY = import.meta.env.VITE_NEWSAPI_KEY;
     const url = `https://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey=${API_KEY}`;
     
     let articleBody = "";
-    let articles;
+    let articles = [];
 
     const fetchArticleData = async _ => {
         try {
