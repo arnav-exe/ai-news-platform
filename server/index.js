@@ -6,8 +6,8 @@ const port = 3000;
 
 app.get("/api/article", async(req, res) => {
     try {
-        const articleBody = await scrapeArticle();
-        res.json(articleBody);
+        const articleData = await scrapeArticle();
+        res.json(articleData);
     }
     catch (error) {
         res.status(500).json({error: "Could not get article body"});

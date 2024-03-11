@@ -3,21 +3,35 @@
     import { Drawer, getDrawerStore, initializeStores } from '@skeletonlabs/skeleton';
 
     import json from './data.json';
-    import articleScrape from "../../server/scraper";
+    import { response } from "express";
 
     const API_KEY = import.meta.env.VITE_NEWSAPI_KEY;
     const url = `https://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey=${API_KEY}`;
     
-    export let articles = [];
+    let articleBody = "";
+
+    const fetchArticleData = async _ => {
+        try {
+            const res = await fetch("http://localhost:3000/api/article");
+            
+            if (!res.ok) { // if fails to fetch from endpoint
+                throw new Error("Failed to fetch article data");
+            }
+            else {
+                const data = await response.json();
+                articleBody = data.join("\n");
+            }
+        }
+        catch (error) {
+            console.error(error);
+        }
+    }
 
     onMount(async _ => {
-        // const response = await fetch(url);
-        // let json = await response.json();
-
-        articles = json["articles"]; // uses dummy data imported from "data.json"
+        articles = json["articles"]; // dummy data imported from "data.json"
+        
+        fetchArticleData();
     });
-
-    let articleBody;
 
     initializeStores();
     const drawerStore = getDrawerStore();
