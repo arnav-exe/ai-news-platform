@@ -18,7 +18,7 @@
                 throw new Error("Failed to fetch article data");
             }
             else {
-                const data = await response.json();
+                const data = await res.json();
                 articleBody = data.join("\n");
             }
         }
@@ -27,18 +27,22 @@
         }
     }
 
+    const articleFetchButtonHanlder = async _ => {
+        console.log("fetching article data");
+        fetchArticleData();
+    }
+
     onMount(async _ => {
         articles = json["articles"]; // dummy data imported from "data.json"
         
-        fetchArticleData();
+        // console.log("fetching article data");
+        // fetchArticleData();
     });
 
     initializeStores();
     const drawerStore = getDrawerStore();
 
     const openArticle = article => { // pass article data as a parameter
-        articleBody = articleScrape();
-
         const drawerSettings = {
             position: "bottom",
             height: "h-[90vh]", //90%vh
@@ -53,15 +57,15 @@
     <!-- article drawer -->
     <Drawer>
         <div class="p-4">
-            <h1 class="h1">{$drawerStore["meta"]["articleTitle"]}</h1>
+            <h1 class="h1 p-10">{$drawerStore["meta"]["articleTitle"]}</h1>
             <p>{$drawerStore["meta"]["articleSummary"]}</p>
         </div>
     </Drawer>
 
     <!-- article cards -->
     <div class="grid justify-items-center items-center">
-        {#each articles as article} <!-- keyed each block to differentiate article data -->
-        <button on:click={_ => openArticle(article)}> <!-- Pass article data to openArticle function -->
+        {#each articles as article}
+        <button on:click={_ => {articleFetchButtonHanlder(); openArticle(article)}}> <!-- Pass article data to openArticle function -->
             <div class="card card-hover overflow-hidden m-8">
                 <header>
                     <img src="{article.urlToImage}" class="bg-black/50 w-full aspect-[21/9]" alt="article thumbnail" />

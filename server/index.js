@@ -3,11 +3,10 @@ import cors from "cors";
 import scrapeArticle from "./scraper.js";
 
 const app = express();
+app.use(cors()); // enabling CORS
+
 const port = 3000;
 
-app.use(cors({
-    origin: "http://localhost:5173/"
-}));
 
 app.get("/api/article", async(req, res) => {
     try {
