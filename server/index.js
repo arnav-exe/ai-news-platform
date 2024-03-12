@@ -26,7 +26,7 @@ app.listen(port, _ => {
 
 /*
 TODO:
-1. enable CORS
+1. make articleBody reactive so it updates when each article card is clicked
 2. write image scraper
 3. add firebase backend
 */
