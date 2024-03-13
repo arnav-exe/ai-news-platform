@@ -1,5 +1,7 @@
 <script>
 	import '../app.postcss';
+	import { onMount } from 'svelte';
+	import { auth, db } from "../lib/firebase/firebase";
 	import { AppShell, AppBar, Avatar, LightSwitch } from '@skeletonlabs/skeleton';
 
 	// Floating UI for Popups
@@ -10,6 +12,21 @@
 	const btnHandler = _ => {
 		console.log("clicked")
 	}
+
+	const nonAuthRoutes = ["/"];
+
+	onMount(_ => {
+		console.log("Mounting");
+		const unsubscribe = auth.onAuthStateChanged(async user => {
+			const currentPath = window.location.pathname;
+
+			if (!user && !nonAuthRoutes.includes(currentPath)) { // if user is NOT logged in
+				// this means user is tryng to access authorized route
+				// deny access
+				window.location.href = "/";
+			}
+		})
+	})
 </script>
 
 <!-- App Shell -->
