@@ -3,10 +3,11 @@
 ### Tech Stack:
  * Svelte
  * SkeletonUI
- * Firebase
  * Tailwind
- * Vite
+ * Firebase
  * ExpressJS
+ * Puppeteer with Node
+ * Vite
 
 
 ### TODO:
