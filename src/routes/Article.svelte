@@ -1,5 +1,6 @@
 <script>
     import { onMount } from "svelte";
+    import { writable } from "svelte/store"
     import { Drawer, getDrawerStore, initializeStores } from '@skeletonlabs/skeleton';
 
     import json from './data.json';
@@ -10,6 +11,8 @@
     let articleBody = "";
     let articles = [];
 
+    const articleBodyStore = writable("");
+
     const fetchArticleData = async url => {
         try {
             const res = await fetch(`http://localhost:3000/api/article?url=${encodeURIComponent(url)}`);
@@ -19,7 +22,9 @@
             }
             else {
                 const data = await res.json();
-                articleBody = data.join("\n");
+                // articleBody = data.join("\n");
+
+                articleBodyStore.set(data.join("\n"));
             }
         }
         catch (error) {
@@ -27,9 +32,15 @@
         }
     }
 
-    const articleFetchButtonHandler = async url => {
+    articleBodyStore.subscribe(body => {
+        articleBody = body;
+    })
+
+    const articleFetchButtonHandler = async article => {
         console.log("fetching article data");
-        fetchArticleData(url);
+        fetchArticleData(article.url);
+
+        openArticle(article);
     }
 
     onMount(async _ => {
@@ -65,7 +76,7 @@
     <!-- article cards -->
     <div class="grid justify-items-center items-center">
         {#each articles as article}
-        <button on:click={_ => {articleFetchButtonHandler(article.url); openArticle(article)}}> <!-- Pass article data to openArticle function -->
+        <button on:click={_ => {articleFetchButtonHandler(article);}}> <!-- Pass article data to openArticle function -->
             <div class="card card-hover overflow-hidden m-8">
                 <header>
                     <img src="{article.urlToImage}" class="bg-black/50 w-full aspect-[21/9]" alt="article thumbnail" />

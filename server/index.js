@@ -20,7 +20,7 @@ app.get("/api/article", async(req, res) => {
         res.json(articleData);
     }
     catch (error) {
-        res.status(500).json({ error : "Could not get article body" });
+        res.status(500).json({ error : "Could not get article body." });
     }
 });
 
