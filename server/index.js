@@ -9,24 +9,21 @@ const port = 3000;
 
 
 app.get("/api/article", async(req, res) => {
+    const { url } = req.query;
+
+    if (!url) { // if URL arg is not given
+        return res.status(400).json({ error : "URL parameter is missing." });
+    }
+
     try {
-        const articleData = await scrapeArticle();
+        const articleData = await scrapeArticle(url);
         res.json(articleData);
     }
     catch (error) {
-        res.status(500).json({error: "Could not get article body"});
+        res.status(500).json({ error : "Could not get article body" });
     }
 });
 
 app.listen(port, _ => {
     console.log(`Server is running on port ${port}`);
 });
-
-
-
-/*
-TODO:
-1. make articleBody reactive so it updates when each article card is clicked
-2. write image scraper
-3. add firebase backend
-*/

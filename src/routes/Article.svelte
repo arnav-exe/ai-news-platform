@@ -5,17 +5,17 @@
     import json from './data.json';
 
     const API_KEY = import.meta.env.VITE_NEWSAPI_KEY;
-    const url = `https://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey=${API_KEY}`;
+    const API_URL = `https://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey=${API_KEY}`;
     
     let articleBody = "";
     let articles = [];
 
-    const fetchArticleData = async _ => {
+    const fetchArticleData = async url => {
         try {
-            const res = await fetch("http://localhost:3000/api/article");
+            const res = await fetch(`http://localhost:3000/api/article?url=${encodeURIComponent(url)}`);
             
             if (!res.ok) { // if fails to fetch from endpoint
-                throw new Error("Failed to fetch article data");
+                throw new Error("Failed to fetch article data. Please reload the page and try again.");
             }
             else {
                 const data = await res.json();
@@ -27,9 +27,9 @@
         }
     }
 
-    const articleFetchButtonHanlder = async _ => {
+    const articleFetchButtonHandler = async url => {
         console.log("fetching article data");
-        fetchArticleData();
+        fetchArticleData(url);
     }
 
     onMount(async _ => {
@@ -45,7 +45,7 @@
     const openArticle = article => { // pass article data as a parameter
         const drawerSettings = {
             position: "bottom",
-            height: "h-[90vh]", //90%vh
+            height: "h-[90vh]", //90% of vh
             meta: { articleTitle: article.title, articleSummary: articleBody } // Use article data here
         };
 
@@ -65,7 +65,7 @@
     <!-- article cards -->
     <div class="grid justify-items-center items-center">
         {#each articles as article}
-        <button on:click={_ => {articleFetchButtonHanlder(); openArticle(article)}}> <!-- Pass article data to openArticle function -->
+        <button on:click={_ => {articleFetchButtonHandler(article.url); openArticle(article)}}> <!-- Pass article data to openArticle function -->
             <div class="card card-hover overflow-hidden m-8">
                 <header>
                     <img src="{article.urlToImage}" class="bg-black/50 w-full aspect-[21/9]" alt="article thumbnail" />

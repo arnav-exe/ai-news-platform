@@ -12,8 +12,7 @@
 
 ### TODO:
  * correctly extract and export url using article.url
- * build web scraper to get article thumbnail from url
+ * add article thumbnail scraping functionality to pptr server
  * fix padding of articles
- * add bottom up slide in modal to display summarised article when card is clicked
- * implement drop-down options menu for when user clicks on profile
  * implemement firebase backend
+ * implement drop-down options menu for when user clicks on profile

@@ -7,6 +7,7 @@
 	// Floating UI for Popups
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
 	import { storePopup } from '@skeletonlabs/skeleton';
+	
     import { doc, getDoc } from 'firebase/firestore';
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 	
