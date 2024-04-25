@@ -1,19 +1,22 @@
 <script>
 	import '../app.postcss';
 	import { onMount } from 'svelte';
-	import { auth, db } from "../lib/firebase/firebase";
+	import { auth, db } from "../lib/firebase/firebase"
 	import { AppShell, AppBar, Avatar, LightSwitch } from '@skeletonlabs/skeleton';
 
 	// Floating UI for Popups
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
 	import { storePopup } from '@skeletonlabs/skeleton';
 	
-    import { doc, getDoc } from 'firebase/firestore';
-	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
+    import { doc, getDoc, setDoc } from 'firebase/firestore';
+	import { authStore } from "../store/store"
 	
+	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
+
+
 	const btnHandler = _ => {
 		console.log("clicked")
-	}
+	};
 
 	const nonAuthRoutes = ["/"];
 
@@ -29,12 +32,45 @@
 				return
 			}
 
-			const docRef = doc(db, 'users', user.uid);
-			const docSnapshot = await getDoc(docRef);
-
+			if (!user) {
+				return;
+			}
 			
-		})
-	})
+			let dataToSetStore; // user data to save to context store
+
+			// means user is authenticated
+			const docReference = doc(db, "users", user.uid);
+			const docSnapshot = await getDoc(docReference);
+
+			if (!docSnapshot.exists()) { // if user document does NOT exist
+				console.log("Creating user")
+				const userReference = doc(db, "user", user.uid);
+				
+				dataToSetStore = {
+					email: user.email
+					// displayName: user.displayName,
+					// initials: user.initials
+				};
+
+				await setDoc(userReference, dataToSetStore, { merge: true });
+			}
+			else { // if user document DOES exist
+				console.log("Fetching user");
+				const userData = docSnapshot.data();
+				dataToSetStore = userData;
+			}
+
+			authStore.update((curr) => {
+				return {
+					...curr, // spread current data incase there is anything extra
+					user, // user in context
+					loading: false, // loading is false since userdata has now been loaded
+					data: dataToSetStore // user data
+				};
+			});
+		});
+		return unsubscribe;
+	});
 </script>
 
 <!-- App Shell -->
