@@ -12,5 +12,8 @@
 
 ### TODO:
  * include supplementary images in articles?
- * implemement firebase backend
+ * pass article body through facebook NLP model for summarization
  * implement drop-down options menu for when user clicks on profile
+ * add login page
+ * add signup page
+ * save user details to firebase

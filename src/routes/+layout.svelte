@@ -12,11 +12,10 @@
 	
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 
-	const btnHandler = _ => {
-		console.log("clicked")
-	};
+	let loggedIn = true;
+	let displayButtons = true;
 
-	const nonAuthRoutes = ["/"];
+	const nonAuthRoutes = ["/", "/login", "/signup"];
 
 	onMount(_ => {
 		console.log("Mounting");
@@ -27,10 +26,12 @@
 				// this means user is tryng to access authorized route
 				// deny access
 				window.location.href = "/";
+				loggedIn = false;
 				return
 			}
 
 			if (!user) {
+				loggedIn = false;
 				return;
 			}
 			
@@ -39,6 +40,8 @@
 			// means user is authenticated
 			const docReference = doc(db, "users", user.uid);
 			const docSnapshot = await getDoc(docReference);
+
+			loggedIn = true;
 
 			if (!docSnapshot.exists()) { // if user document does NOT exist
 				console.log("Creating user")
@@ -67,11 +70,22 @@
 				};
 			});
 		});
+
+
+
+
+		if (window.location.href.includes("login") || window.location.href.includes("signup")) {
+			displayButtons = false;
+		}
+		else {
+			displayButtons = true;
+		}
+
+
+
+
 		return unsubscribe;
 	});
-
-
-
 
 	// AVATAR COMBOBOX
 	let comboboxValue;
@@ -95,22 +109,25 @@
 			<svelte:fragment slot="trail">
 				<LightSwitch />
 
-
-
-
-				<div use:popup={popupCombobox}>
-				<button on:click={btnHandler}><Avatar initials="AJ" background="bg-primary-500" /></button>
-				</div>
-
-				<div class="card w-48 shadow-xl py-2" data-popup="popupCombobox">
-					<ListBox rounded="rounded-none">
-						<ListBoxItem bind:group={comboboxValue} name="medium" value="settings">Account Settings</ListBoxItem>
-						<ListBoxItem bind:group={comboboxValue} name="medium" value="sign-out">Sign Out</ListBoxItem>
-					</ListBox>
-					<div class="arrow bg-surface-100-800-token" />
-				</div>
-
-
+				{#if displayButtons}
+				{#if loggedIn}
+					<div use:popup={popupCombobox}>
+						<button><Avatar initials="AJ" background="bg-primary-500" border="border-4 border-surface-300-600-token hover:!border-primary-500" cursor="cursor-pointer" /></button>
+					</div>
+	
+					<div class="card w-48 shadow-xl py-2" data-popup="popupCombobox">
+						<ListBox rounded="rounded-none">
+							<ListBoxItem bind:group={comboboxValue} name="medium" value="settings">Account Settings</ListBoxItem>
+							<ListBoxItem bind:group={comboboxValue} name="medium" value="sign-out">Sign Out</ListBoxItem>
+						</ListBox>
+						<div class="arrow bg-surface-100-800-token" />
+					</div>
+				{:else if !loggedIn}
+						<a href="/login" type="button" background="bg-primary-500" class="btn variant-filled-primary">Login</a>
+						<a href="/signup" type="button" background="bg-primary-500" class="btn variant-filled-secondary">Signup</a>
+				{/if}
+				{/if}
+				
 
 			</svelte:fragment>
 		</AppBar>
