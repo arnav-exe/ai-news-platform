@@ -15,3 +15,5 @@
  * add functionality to drop-down options menu for when user clicks on profile
  * include supplementary images in articles?
  * pass article body through facebook NLP model for summarization
+ * look into using EITHER [async library](https://github.com/caolan/async) OR [web workers](https://www.npmjs.com/package/webworker-threads) to parallel process the for loop that gets the article thumbnails
+ * 
