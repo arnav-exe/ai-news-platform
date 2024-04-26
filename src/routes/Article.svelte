@@ -72,7 +72,10 @@
         const drawerSettings = {
             position: "bottom",
             height: "h-[90vh]", //90% of vh
-            meta: { articleTitle: article.title } // store article header
+            meta: {
+                articleTitle: article.title, // store article header (for displaying on main page)
+                articleURL: article.url // store article URL (for displaying link to original inside article slider)
+            }
         };
 
         drawerStore.open(drawerSettings);
@@ -94,6 +97,8 @@
                 </section>
             {:else}
                 <p>{articleBody}</p>
+                <br>
+                <a href="{$drawerStore.meta.articleURL}" class="variant-soft-secondary bg-transparent underline">Link to the original article -></a>
             {/if}
         </div>
     </Drawer>
