@@ -50,7 +50,9 @@
 
     const articleFetchButtonHandler = async url => {
         loading = true;
+
         console.log("fetching article body");
+        
         fetchArticleBody(url);
     }
 
@@ -58,6 +60,7 @@
         articles = json["articles"]; // dummy data imported from "data.json"
 
         console.log("fetching article thumbnails");
+        
         for (const article of articles) {
             await fetchArticleImg(article.url);
         }
@@ -97,21 +100,21 @@
     </Drawer>
     
     <!-- article cards -->
-    <div class="grid justify-items-center items-center">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-8 m-8 justify-items-center items-center">
         {#each articles as article}
         <button on:click={_ => {articleFetchButtonHandler(article.url); openArticle(article)}}> <!-- Pass article data to openArticle function -->
-            <div class="card card-hover overflow-hidden m-8">
+            <div class="card card-hover overflow-hidden max-w-2xl aspect-auto">
                 <header>
-                    <img src="{articleThumbnails[article.url]}" class="bg-black/50 w-full aspect-[21/9]" alt="article thumbnail" />
+                    <img src="{articleThumbnails[article.url]}" class="bg-black/50 w-full height-auto aspect-[16/9]" alt="article thumbnail" />
                 </header>
                 <div class="p-4 space-y-4">
                     <img src="../../../bbc.png" class="max-w-12 h-auto" alt="BBC">
-                    <h3 class="h3" data-toc-ignore>{article.title}</h3>
+                    <h3 class="h3 text-left" data-toc-ignore>{article.title}</h3>
                 </div>
                 <hr class="opacity-50" />
                 <footer class="p-4 flex justify-start items-center space-x-4">
                     <div class="flex-auto flex justify-between items-center">
-                        <h6 class="font-bold" data-toc-ignore>By {article.author}</h6>
+                        <small data-toc-ignore>By {article.author}</small>
                         <small>Published: {article.publishedAt.slice(0, 10)}</small>
                     </div>
                 </footer>
