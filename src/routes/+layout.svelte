@@ -2,17 +2,15 @@
 	import '../app.postcss';
 	import { onMount } from 'svelte';
 	import { auth, db } from "../lib/firebase/firebase"
-	import { AppShell, AppBar, Avatar, LightSwitch } from '@skeletonlabs/skeleton';
+	import { AppShell, AppBar, Avatar, LightSwitch, storePopup, ListBox, ListBoxItem, popup } from '@skeletonlabs/skeleton';
 
 	// Floating UI for Popups
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
-	import { storePopup } from '@skeletonlabs/skeleton';
 	
     import { doc, getDoc, setDoc } from 'firebase/firestore';
 	import { authStore } from "../store/store"
 	
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
-
 
 	const btnHandler = _ => {
 		console.log("clicked")
@@ -71,6 +69,19 @@
 		});
 		return unsubscribe;
 	});
+
+
+
+
+	// AVATAR COMBOBOX
+	let comboboxValue;
+
+	const popupCombobox = {
+		event: 'click',
+		target: 'popupCombobox',
+		placement: 'bottom',
+		closeQuery: '.listbox-item'
+	};
 </script>
 
 <!-- App Shell -->
@@ -83,7 +94,24 @@
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
 				<LightSwitch />
-				<button on:click={btnHandler}><Avatar initials="AJ" background="bg-primary-500" /></button>							
+
+
+
+
+				<div use:popup={popupCombobox}>
+				<button on:click={btnHandler}><Avatar initials="AJ" background="bg-primary-500" /></button>
+				</div>
+
+				<div class="card w-48 shadow-xl py-2" data-popup="popupCombobox">
+					<ListBox rounded="rounded-none">
+						<ListBoxItem bind:group={comboboxValue} name="medium" value="settings">Account Settings</ListBoxItem>
+						<ListBoxItem bind:group={comboboxValue} name="medium" value="sign-out">Sign Out</ListBoxItem>
+					</ListBox>
+					<div class="arrow bg-surface-100-800-token" />
+				</div>
+
+
+
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>

@@ -27,7 +27,7 @@
     "vite-plugin-tailwind-purgecss": "0.2.0"
   },
   "dependencies": {
-    "@floating-ui/dom": "1.6.3",
+    "@floating-ui/dom": "^1.6.3",
     "concurrently": "^8.2.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",

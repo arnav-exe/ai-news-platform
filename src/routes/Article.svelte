@@ -50,9 +50,6 @@
 
     const articleFetchButtonHandler = async url => {
         loading = true;
-
-        console.log("fetching article body");
-        
         fetchArticleBody(url);
     }
 
@@ -62,9 +59,7 @@
         // CODE HERE
 
         articles = json["articles"]; // dummy data imported from "data.json"
-
-        console.log("fetching article thumbnails");
-
+        
         for (const article of articles) {
             await fetchArticleImg(article.url);
         }
