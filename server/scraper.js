@@ -1,21 +1,5 @@
 import puppeteer from "puppeteer";
 
-const scrapeArticleBody = async url => {
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-
-    await page.goto(decodeURIComponent(url));
-    
-    let childElements = await page.evaluate(_ => {
-        const elements = Array.from(document.querySelectorAll('[data-component="text-block"]'));
-
-        return elements.map(e => e.innerText);
-    })
-    await browser.close();
-
-    return childElements;
-}
-
 const scrapeArticleImg = async url => {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
@@ -36,4 +20,20 @@ const scrapeArticleImg = async url => {
     return articleImg;
 }
 
-export default { scrapeArticleBody, scrapeArticleImg };
+const scrapeArticleBody = async url => {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+
+    await page.goto(decodeURIComponent(url));
+    
+    let childElements = await page.evaluate(_ => {
+        const elements = Array.from(document.querySelectorAll('[data-component="text-block"]'));
+
+        return elements.map(e => e.innerText);
+    })
+    await browser.close();
+
+    return childElements;
+}
+
+export { scrapeArticleImg, scrapeArticleBody };

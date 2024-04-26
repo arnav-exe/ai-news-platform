@@ -12,18 +12,33 @@
 
     let articleThumbnails = {}; // store article thumbnail URLs (with ID so they can be appropriately referenced)
     let articleBody = ""; // article body
-    
 
-    const fetchArticleData = async url => { // fetch article data from pptr webscraper
+    const fetchArticleImg = async url => { // fetch article thumbnail from pptr webscraper
         try {
-            const res = await fetch(`http://localhost:3000/api/article?url=${encodeURIComponent(url)}`);
+            const res = await fetch(`http://localhost:3000/api/article/img?url=${encodeURIComponent(url)}`);
             
             if (!res.ok) { // if fails to fetch from endpoint
-                throw new Error("Failed to fetch article data. Please reload the page and try again.");
+                throw new Error("Failed to fetch article thumbnail. Please reload the page and try again.");
             }
             else { // if succeed
                 const data = await res.json();
                 articleThumbnails[url] = data.articleImg;
+            }
+        }
+        catch (error) {
+            console.error(error);
+        }
+    }
+
+    const fetchArticleBody = async url => { // fetch article data from pptr webscraper
+        try {
+            const res = await fetch(`http://localhost:3000/api/article/body?url=${encodeURIComponent(url)}`);
+            
+            if (!res.ok) { // if fails to fetch from endpoint
+                throw new Error("Failed to fetch article body. Please reload the page and try again.");
+            }
+            else { // if succeed
+                const data = await res.json();
                 articleBody = data.childElements.join("\n");
                 loading = false; // disable loading state since article data been fetched
             }
@@ -36,18 +51,16 @@
     const articleFetchButtonHandler = async url => {
         loading = true;
         console.log("fetching article data");
-        fetchArticleData(url);
+        fetchArticleBody(url);
     }
 
     onMount(async _ => {
         articles = json["articles"]; // dummy data imported from "data.json"
 
-        // console.log("fetching article data");
-        // fetchArticleData();
-
-        // for (const article of articles) {
-        //     await fetchArticleData(article.url);
-        // }
+        console.log("fetching article thumbnails");
+        for (const article of articles) {
+            await fetchArticleImg(article.url);
+        }
     });
 
     initializeStores();
