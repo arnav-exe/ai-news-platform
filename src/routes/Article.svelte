@@ -9,6 +9,7 @@
     
     let articleBody = "";
     let articles = [];
+    let loading = true;
 
     const fetchArticleData = async url => {
         try {
@@ -21,6 +22,7 @@
                 const data = await res.json();
                 
                 articleBody = data.join("\n");
+                loading = false;
             }
         }
         catch (error) {
@@ -29,6 +31,7 @@
     }
 
     const articleFetchButtonHandler = async url => {
+        loading = true;
         console.log("fetching article data");
         fetchArticleData(url);
     }
@@ -47,21 +50,19 @@
         const drawerSettings = {
             position: "bottom",
             height: "h-[90vh]", //90% of vh
-            meta: { articleTitle: article.title, articleSummary: articleBody } // Use article data here
+            meta: { articleTitle: article.title } // store article header
         };
 
         drawerStore.open(drawerSettings);
     }
-
 </script>
 
 <div class="container">
     <!-- article drawer -->
     <Drawer>
-        {#key $drawerStore.meta.articleSummary}
         <div class="p-4">
             <h1 class="h1 p-10">{$drawerStore.meta.articleTitle}</h1>
-            {#if $drawerStore.meta.articleSummary.length == 0}     
+            {#if loading}     
                 <section class="card w-full">
                     <div class="p-4 space-y-4">
                         {#each {length: 10} as _}
@@ -70,10 +71,9 @@
                     </div>
                 </section>
             {:else}
-                <p>{$drawerStore.meta.articleSummary}</p>
+                <p>{articleBody}</p>
             {/if}
         </div>
-        {/key}
     </Drawer>
     
     <!-- article cards -->
