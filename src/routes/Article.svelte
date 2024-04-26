@@ -22,7 +22,7 @@
             }
             else { // if succeed
                 const data = await res.json();
-                articleThumbnails[url] = data.articleImg;
+                articleThumbnails[url] = data;
             }
         }
         catch (error) {
@@ -39,7 +39,7 @@
             }
             else { // if succeed
                 const data = await res.json();
-                articleBody = data.childElements.join("\n");
+                articleBody = data.join("\n");
                 loading = false; // disable loading state since article data been fetched
             }
         }
@@ -50,7 +50,7 @@
 
     const articleFetchButtonHandler = async url => {
         loading = true;
-        console.log("fetching article data");
+        console.log("fetching article body");
         fetchArticleBody(url);
     }
 
