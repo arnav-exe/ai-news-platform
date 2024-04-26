@@ -11,8 +11,9 @@
 
 
 ### TODO:
- * correctly extract and export url using article.url
  * add article thumbnail scraping functionality to pptr server
- * fix padding of articles
+ * scrape articles from various news sources and update card logos accordingly
+ * fix padding & general formatting of articles
+ * include supplementary images in articles?
  * implemement firebase backend
  * implement drop-down options menu for when user clicks on profile
