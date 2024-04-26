@@ -5,7 +5,7 @@
     import json from './data.json';
 
     const API_KEY = import.meta.env.VITE_NEWSAPI_KEY;
-    const API_URL = `https://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey=${API_KEY}`;
+    const API_URL = `https://newsapi.org/v2/top-headlines?sources?apiKey=${API_KEY}`;
     
     let articles = [];
     let loading = true; // loading state to manage placeholders
@@ -57,6 +57,10 @@
     }
 
     onMount(async _ => {
+
+        // SCRAPE FROM API_URL HERE INSTEAD OF CALLING FROM DATA.JSON
+        // CODE HERE
+
         articles = json["articles"]; // dummy data imported from "data.json"
 
         console.log("fetching article thumbnails");
