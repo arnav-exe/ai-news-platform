@@ -1,11 +1,11 @@
 import puppeteer from "puppeteer";
 
-const scrapeArticle = async url => {
+const scrapeArticleBody = async url => {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
 
     await page.goto(decodeURIComponent(url));
-
+    
     let childElements = await page.evaluate(_ => {
         const elements = Array.from(document.querySelectorAll('[data-component="text-block"]'));
 
@@ -16,4 +16,24 @@ const scrapeArticle = async url => {
     return childElements;
 }
 
-export default scrapeArticle;
+const scrapeArticleImg = async url => {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+
+    await page.goto(decodeURIComponent(url));
+
+    // wait for img to load
+    await page.waitForSelector("img");
+
+    let articleImg = await page.evaluate(_ => {
+        const img = document.querySelector("img"); // scrapes src of first img tag
+
+        return img ? img.src : null;
+    })
+    
+    await browser.close();
+
+    return articleImg;
+}
+
+export default { scrapeArticleBody, scrapeArticleImg };

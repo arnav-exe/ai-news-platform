@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import scrapeArticle from "./scraper.js";
+import { child } from "firebase/database";
 
 const app = express();
 app.use(cors()); // enabling CORS
@@ -16,8 +17,8 @@ app.get("/api/article", async(req, res) => {
     }
 
     try {
-        const articleData = await scrapeArticle(url);
-        res.json(articleData);
+        const { articleImg, childElements } = await scrapeArticle(url);
+        res.json({ articleImg, childElements });
     }
     catch (error) {
         res.status(500).json({ error : "Could not get article body." });

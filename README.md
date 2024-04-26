@@ -11,7 +11,7 @@
 
 
 ### TODO:
- * add article thumbnail scraping functionality to pptr server
+ * format article thumbnails properly
  * scrape articles from various news sources and update card logos accordingly
  * fix padding & general formatting of articles
  * include supplementary images in articles?
