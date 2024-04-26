@@ -13,7 +13,6 @@
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 
 	let loggedIn = true;
-	let displayButtons = true;
 
 	const nonAuthRoutes = ["/", "/login", "/signup"];
 
@@ -70,20 +69,6 @@
 				};
 			});
 		});
-
-
-
-
-		if (window.location.href.includes("login") || window.location.href.includes("signup")) {
-			displayButtons = false;
-		}
-		else {
-			displayButtons = true;
-		}
-
-
-
-
 		return unsubscribe;
 	});
 
@@ -109,7 +94,6 @@
 			<svelte:fragment slot="trail">
 				<LightSwitch />
 
-				{#if displayButtons}
 				{#if loggedIn}
 					<div use:popup={popupCombobox}>
 						<button><Avatar initials="AJ" background="bg-primary-500" border="border-4 border-surface-300-600-token hover:!border-primary-500" cursor="cursor-pointer" /></button>
@@ -126,8 +110,6 @@
 						<a href="/login" type="button" background="bg-primary-500" class="btn variant-filled-primary">Login</a>
 						<a href="/signup" type="button" background="bg-primary-500" class="btn variant-filled-secondary">Signup</a>
 				{/if}
-				{/if}
-				
 
 			</svelte:fragment>
 		</AppBar>
