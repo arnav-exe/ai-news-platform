@@ -4,50 +4,50 @@
     "articles": [
         {
             "title": "Colin Firth's wet shirt from Pride and Prejudice goes up for auction",
-            "author": "BBC News",
+            "author": "The Verge",
             "source": {
-                "id": "bbc-news",
-                "name": "BBC News"
+                "id": "the-verge",
+                "name": "The Verge"
             },
             "publishedAt": "2024-03-05T17:52:19.753483Z",
             "url": "https://www.bbc.co.uk/news/entertainment-arts-68415018"
         },
         {
             "title": "Grandmother gets $3.7m over false Find My iPhone raid",
-            "author": "BBC News",
+            "author": "CNN",
             "source": {
-                "id": "bbc-news",
-                "name": "BBC News"
+                "id": "cnn",
+                "name": "CNN"
             },
             "publishedAt": "2024-03-05T17:52:17.8164621Z",
             "url": "https://www.bbc.co.uk/news/world-us-canada-68482374"
         },
         {
             "title": "Taylor Swift urges voters to the polls ahead of Super Tuesday",
-            "author": "BBC News",
+            "author": "ABC News",
             "source": {
-                "id": "bbc-news",
-                "name": "BBC News"
+                "id": "abc-news",
+                "name": "ABC News"
             },
             "publishedAt": "2024-03-05T17:37:15.9113627Z",
             "url": "https://www.bbc.co.uk/news/world-us-canada-68482442"
         },
         {
             "title": "ICC issues arrest warrants for top Russian commanders",
-            "author": "BBC News",
+            "author": "Al Jazeera English",
             "source": {
-                "id": "bbc-news",
-                "name": "BBC News"
+                "id": "al-jazeera-english",
+                "name": "Al Jazeera English"
             },
             "publishedAt": "2024-03-05T16:37:18.4255935Z",
             "url": "https://www.bbc.co.uk/news/world-europe-68483012"
         },
         {
             "title": "Facebook and Instagram down in apparent global outage",
-            "author": "BBC News",
+            "author": "Ars Technica",
             "source": {
-                "id": "bbc-news",
-                "name": "BBC News"
+                "id": "ars-technica",
+                "name": "Ars Technica"
             },
             "publishedAt": "2024-03-05T16:37:15.3390934Z",
             "url": "https://www.bbc.co.uk/news/technology-68483732"

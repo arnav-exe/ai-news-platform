@@ -60,7 +60,7 @@
         articles = json["articles"]; // dummy data imported from "data.json"
 
         console.log("fetching article thumbnails");
-        
+
         for (const article of articles) {
             await fetchArticleImg(article.url);
         }
@@ -108,13 +108,13 @@
                     <img src="{articleThumbnails[article.url]}" class="bg-black/50 w-full height-auto aspect-[16/9]" alt="article thumbnail" />
                 </header>
                 <div class="p-4 space-y-4">
-                    <img src="../../../bbc.png" class="max-w-12 h-auto" alt="BBC">
+                    <img src="../../{article.source.id}.png" class="max-w-12 h-auto" alt="{article.source.name}">
                     <h3 class="h3 text-left" data-toc-ignore>{article.title}</h3>
                 </div>
                 <hr class="opacity-50" />
                 <footer class="p-4 flex justify-start items-center space-x-4">
                     <div class="flex-auto flex justify-between items-center">
-                        <small data-toc-ignore>By {article.author}</small>
+                        <small data-toc-ignore>By: {article.source.name}</small>
                         <small>Published: {article.publishedAt.slice(0, 10)}</small>
                     </div>
                 </footer>
