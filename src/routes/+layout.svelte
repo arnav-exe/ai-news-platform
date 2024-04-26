@@ -12,13 +12,13 @@
 	
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 
-	let loggedIn = true;
+	let loggedIn = false; // user logged in tracker (for dynamic content updation)
 
-	const nonAuthRoutes = ["/", "/login", "/signup"];
+	const nonAuthRoutes = ["/", "/login", "/signup"]; // routes that ARE allowed to be visited by unauthenticated users
 
 	onMount(_ => {
 		console.log("Mounting");
-		const unsubscribe = auth.onAuthStateChanged(async user => {
+		const unsubscribe = auth.onAuthStateChanged(async user => { // listens to state changes (login, logout, register. etc.)
 			const currentPath = window.location.pathname;
 
 			if (!user && !nonAuthRoutes.includes(currentPath)) { // if user is NOT logged in
@@ -26,23 +26,25 @@
 				// deny access
 				window.location.href = "/";
 				loggedIn = false;
-				return
+
+				return;
 			}
 
 			if (!user) {
 				loggedIn = false;
+
 				return;
 			}
 			
 			let dataToSetStore; // user data to save to context store
 
-			// means user is authenticated
+			// if code has passed above 2 if statements, means user is authenticated
 			const docReference = doc(db, "users", user.uid);
 			const docSnapshot = await getDoc(docReference);
 
 			loggedIn = true;
 
-			if (!docSnapshot.exists()) { // if user document does NOT exist
+			if (!docSnapshot.exists()) { // if users document does NOT exist
 				console.log("Creating user")
 				const userReference = doc(db, "users", user.uid);
 				
@@ -60,11 +62,11 @@
 				dataToSetStore = userData;
 			}
 
-			authStore.update((curr) => {
+			authStore.update(curr => {
 				return {
 					...curr, // spread current data incase there is anything extra
 					user, // user in context
-					loading: false, // loading is false since userdata has now been loaded
+					loading: false, // userdata has now been loaded
 					data: dataToSetStore // user data
 				};
 			});

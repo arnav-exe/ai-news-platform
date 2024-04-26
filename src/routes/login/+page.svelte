@@ -1,17 +1,31 @@
 <script>
+    import { ProgressRadial } from '@skeletonlabs/skeleton';
+    import { authHandlers } from "../../store/store";
+
 	let email;
 	let password;
 	
+	let authenticating = false;
+
 	// invalid input error tracker
 	let error = false;
 
-	const authenticator = _ => {
+	const authenticator = async _ => {
+		authenticating = true;
 		error = false;
-		
+
 		if (!email || !password) { // if any field is left blank
 			error = true;
 
 			return;
+		}
+
+		// attempting login
+		try {
+			await authHandlers.login(email, password)
+		} catch (error) {
+			console.log("Auth error: ", error);
+			error = true;
 		}
 	}
 </script>
@@ -36,7 +50,13 @@
 
 	<br>
 
-	<button type="button" on:click={authenticator} class="btn variant-filled-primary">Submit</button>
+	<button type="button" on:click={authenticator} class="btn variant-filled-primary">
+		{#if authenticating && !error}
+			<ProgressRadial width="w-5" />
+		{:else}
+			Submit
+		{/if}
+	</button>
 
 </div>
 

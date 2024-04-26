@@ -1,19 +1,31 @@
 <script>
+    import { ProgressRadial } from '@skeletonlabs/skeleton';
+    import { authHandlers } from "../../store/store";
+
     let firstName;
     let lastName;
     let email;
     let password;
     let confirmPassword;
 
+    let authenticating = false;
+
     // invalid input error trackers
     let emptyError = false;
     let notMatchingError = false;
+    let authError = false;
+
+    setTimeout(_ => {
+
+    }, 1000);
 
 
-    const authenticator = _ => {
+    const authenticator = async _ => {
+		authenticating = true;
         emptyError = false;
         notMatchingError = false;
-        
+        authError = false;
+
         if (!firstName || !lastName || !email || !password || !confirmPassword) { // if any field is left blank
             emptyError = true;
             
@@ -24,8 +36,18 @@
             
             return;
         }
+
+        // attempting signup
+        try {
+            await authHandlers.signup(email, password) 
+        } catch (error) {
+            console.log("Auth Error: ", error);
+            authError = true;
+        }
     }
 </script>
+
+
 
 <div class="container h-full mx-auto flex justify-center items-center flex-col w-3/5">
 
@@ -57,14 +79,22 @@
 	</label>
 
     {#if emptyError}
-    <p class="variant-soft-primary">ERROR! One or more fields are empty.</p>        
+    <p class="variant-soft-primary">ERROR! One or more fields are empty.</p>
     {:else if notMatchingError}
-    <p class="variant-soft-primary">ERROR! Passwords do not match.</p>        
+    <p class="variant-soft-primary">ERROR! Passwords do not match.</p>
+    {:else if authError}
+    <p class="variant-soft-primary">ERROR! There was an error with authentication. Please try again.</p>
     {/if}
 
 	<br>
 
-	<button type="button" on:click={authenticator} class="btn variant-filled-primary">Submit</button>
+	<button type="button" on:click={authenticator} class="btn variant-filled-primary">
+        {#if authenticating && !emptyError && !notMatchingError && !authError}
+            <ProgressRadial width="w-5" />
+        {:else}
+            Submit
+        {/if}
+    </button>
 
 </div>
 
