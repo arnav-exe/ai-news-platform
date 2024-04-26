@@ -1,5 +1,19 @@
 <script>
+	let email;
+	let password;
+	
+	// invalid input error tracker
+	let error = false;
 
+	const authenticator = _ => {
+		error = false;
+		
+		if (!email || !password) { // if any field is left blank
+			error = true;
+
+			return;
+		}
+	}
 </script>
 
 <div class="container h-full mx-auto flex justify-center items-center flex-col w-3/5">
@@ -8,17 +22,21 @@
 	
 	<label class="label w-full">
 		<span>Email</span>
-		<input class="input w-full" title="Input (email)" type="email" placeholder="john@example.com" autocomplete="email" />
+		<input bind:value={email} class="input w-full" title="Input (email)" type="email" placeholder="john@example.com" autocomplete="email" />
 	</label>
 
 	<label class="label w-full">
 		<span>Password</span>
-		<input class="input" title="Input (password)" type="password" placeholder="password" />
+		<input bind:value={password} class="input" title="Input (password)" type="password" placeholder="password" />
 	</label>
+
+	{#if error}
+	<p class="variant-soft-primary">ERROR! Invalid email or password. Please try again.</p>
+	{/if}
 
 	<br>
 
-	<button type="button" class="btn variant-filled-primary">Submit</button>
+	<button type="button" on:click={authenticator} class="btn variant-filled-primary">Submit</button>
 
 </div>
 
