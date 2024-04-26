@@ -41,7 +41,7 @@
     });
 
     initializeStores();
-    const drawerStore = getDrawerStore();
+    let drawerStore = getDrawerStore();
 
     const openArticle = article => { // pass article data as a parameter
         const drawerSettings = {
@@ -52,17 +52,30 @@
 
         drawerStore.open(drawerSettings);
     }
+
 </script>
 
 <div class="container">
     <!-- article drawer -->
     <Drawer>
+        {#key $drawerStore.meta.articleSummary}
         <div class="p-4">
-            <h1 class="h1 p-10">{$drawerStore["meta"]["articleTitle"]}</h1>
-            <p>{$drawerStore["meta"]["articleSummary"]}</p>
+            <h1 class="h1 p-10">{$drawerStore.meta.articleTitle}</h1>
+            {#if $drawerStore.meta.articleSummary.length == 0}     
+                <section class="card w-full">
+                    <div class="p-4 space-y-4">
+                        {#each {length: 10} as _}
+                        <div class="placeholder" />
+                        {/each}
+                    </div>
+                </section>
+            {:else}
+                <p>{$drawerStore.meta.articleSummary}</p>
+            {/if}
         </div>
+        {/key}
     </Drawer>
-
+    
     <!-- article cards -->
     <div class="grid justify-items-center items-center">
         {#each articles as article}

@@ -44,12 +44,12 @@
 
 			if (!docSnapshot.exists()) { // if user document does NOT exist
 				console.log("Creating user")
-				const userReference = doc(db, "user", user.uid);
+				const userReference = doc(db, "users", user.uid);
 				
 				dataToSetStore = {
-					email: user.email
-					// displayName: user.displayName,
-					// initials: user.initials
+					email: user.email,
+					displayName: user.displayName,
+					initials: user.initials
 				};
 
 				await setDoc(userReference, dataToSetStore, { merge: true });
