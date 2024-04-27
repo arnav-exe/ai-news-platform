@@ -11,7 +11,10 @@
 	let error = false;
 
 	const authenticator = async _ => {
-		authenticating = true;
+		if(authenticating) { // prevent user from spam-clicking authenticate
+			return;
+		}
+
 		error = false;
 
 		if (!email || !password) { // if any field is left blank
@@ -19,6 +22,8 @@
 
 			return;
 		}
+
+		authenticating = true;
 
 		// attempting login
 		try {

@@ -21,7 +21,10 @@
 
 
     const authenticator = async _ => {
-		authenticating = true;
+        if(authenticating) { // prevent user from spam-clicking authenticate
+			return;
+		}
+
         emptyError = false;
         notMatchingError = false;
         authError = false;
@@ -36,6 +39,8 @@
             
             return;
         }
+
+		authenticating = true;
 
         // attempting signup
         try {

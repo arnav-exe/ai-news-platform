@@ -2,17 +2,17 @@
 	import '../app.postcss';
 	import { onMount } from 'svelte';
 	import { auth, db } from "../lib/firebase/firebase"
-	import { AppShell, AppBar, Avatar, LightSwitch, storePopup, ListBox, ListBoxItem, popup } from '@skeletonlabs/skeleton';
+	import { AppShell, AppBar, Avatar, LightSwitch, storePopup, popup } from '@skeletonlabs/skeleton';
 
 	// Floating UI for Popups
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
 	
     import { doc, getDoc, setDoc } from 'firebase/firestore';
-	import { authStore } from "../store/store"
+	import { authHandlers, authStore } from "../store/store"
 	
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 
-	let loggedIn = false; // user logged in tracker (for dynamic content updation)
+	let loggedIn = true; // user logged in tracker (for dynamic content updation)
 
 	const nonAuthRoutes = ["/", "/login", "/signup"]; // routes that ARE allowed to be visited by unauthenticated users
 
@@ -74,16 +74,27 @@
 		return unsubscribe;
 	});
 
-	// AVATAR COMBOBOX
-	let comboboxValue;
 
-	const popupCombobox = {
-		event: 'click',
-		target: 'popupCombobox',
-		placement: 'bottom',
-		closeQuery: '.listbox-item'
+
+	
+
+	const popupClick = {
+		event: "click",
+		target: "popupClick",
+		placement: "bottom"
 	};
+					
+
+	const testFunc1 = _ => {
+		console.log("ACCESSING ACCOUNT SETTINGS");
+	}
+
+	const testFunc2 = _ => {
+		console.log("LOGGING OUT");
+	}
 </script>
+
+					
 
 <!-- App Shell -->
 <AppShell>
@@ -97,20 +108,20 @@
 				<LightSwitch />
 
 				{#if loggedIn}
-					<div use:popup={popupCombobox}>
-						<button><Avatar initials="AJ" background="bg-primary-500" border="border-4 border-surface-300-600-token hover:!border-primary-500" cursor="cursor-pointer" /></button>
-					</div>
-	
-					<div class="card w-48 shadow-xl py-2" data-popup="popupCombobox">
-						<ListBox rounded="rounded-none">
-							<ListBoxItem bind:group={comboboxValue} name="medium" value="settings">Account Settings</ListBoxItem>
-							<ListBoxItem bind:group={comboboxValue} name="medium" value="sign-out">Sign Out</ListBoxItem>
-						</ListBox>
-						<div class="arrow bg-surface-100-800-token" />
+					<button use:popup={popupClick}>
+						<Avatar initials="AJ" background="bg-primary-500" border="border-4 border-surface-300-600-token hover:!border-primary-500" cursor="cursor-pointer" />
+					</button>
+					<div class="card p-4" data-popup="popupClick">
+						<nav class="list-nav">
+							<ul>
+								<li><a on:click={testFunc1} href="/"><span class="flex-auto">Account Settings</span></a></li>
+								<li><a on:click={testFunc2} href="/"><span class="flex-auto">Logout</span></a></li>
+							</ul>
+						</nav>
 					</div>
 				{:else if !loggedIn}
-						<a href="/login" type="button" background="bg-primary-500" class="btn variant-filled-primary">Login</a>
-						<a href="/signup" type="button" background="bg-primary-500" class="btn variant-filled-secondary">Signup</a>
+					<a href="/login" type="button" background="bg-primary-500" class="btn variant-filled-primary">Login</a>
+					<a href="/signup" type="button" background="bg-primary-500" class="btn variant-filled-secondary">Signup</a>
 				{/if}
 
 			</svelte:fragment>
