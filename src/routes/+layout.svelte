@@ -8,17 +8,26 @@
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
 	
     import { doc, getDoc, setDoc } from 'firebase/firestore';
-	import { authHandlers, authStore } from "../store/store"
+	import { authStore } from "../store/store"
 	
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 
-	let loggedIn = true; // user logged in tracker (for dynamic content updation)
+	let loggedIn = false; // user logged in tracker (for dynamic content updation)
 
 	const nonAuthRoutes = ["/", "/login", "/signup"]; // routes that ARE allowed to be visited by unauthenticated users
 
 	onMount(_ => {
 		console.log("Mounting");
 		const unsubscribe = auth.onAuthStateChanged(async user => { // listens to state changes (login, logout, register. etc.)
+			console.log("user:")
+			console.log(user)
+			authStore.update(curr => {
+				return {
+					...curr,
+					isLoading: false,
+					currentUser: user
+				};
+			});
 			const currentPath = window.location.pathname;
 
 			if (!user && !nonAuthRoutes.includes(currentPath)) { // if user is NOT logged in
@@ -62,12 +71,15 @@
 				dataToSetStore = userData;
 			}
 
+			console.log("curr object inside authStore.update():")
+			console.log(user)
 			authStore.update(curr => {
+				
 				return {
 					...curr, // spread current data incase there is anything extra
-					user, // user in context
-					loading: false, // userdata has now been loaded
-					data: dataToSetStore // user data
+					user: user, // user in context
+					loading: false // userdata has now been loaded
+					// data: dataToSetStore // user data
 				};
 			});
 		});

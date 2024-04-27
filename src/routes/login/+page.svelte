@@ -8,17 +8,19 @@
 	let authenticating = false;
 
 	// invalid input error tracker
-	let error = false;
+	let emptyError = false;
+	let doesNotExistError = false;
 
 	const authenticator = async _ => {
 		if(authenticating) { // prevent user from spam-clicking authenticate
 			return;
 		}
 
-		error = false;
+		emptyError = false;
+		doesNotExistError = false;
 
 		if (!email || !password) { // if any field is left blank
-			error = true;
+			emptyError = true;
 
 			return;
 		}
@@ -30,7 +32,7 @@
 			await authHandlers.login(email, password)
 		} catch (error) {
 			console.log("Auth error: ", error);
-			error = true;
+			doesNotExistError = true;
 		}
 	}
 </script>
@@ -49,14 +51,16 @@
 		<input bind:value={password} class="input" title="Input (password)" type="password" placeholder="password" />
 	</label>
 
-	{#if error}
+	{#if emptyError}
 	<p class="variant-soft-primary">ERROR! Invalid email or password. Please try again.</p>
+	{:else if doesNotExistError}
+	<p class="variant-soft-primary">ERROR! User does not exist. Please create an account first.</p>
 	{/if}
 
 	<br>
 
 	<button type="button" on:click={authenticator} class="btn variant-filled-primary">
-		{#if authenticating && !error}
+		{#if authenticating && !emptyError && !doesNotExistError}
 			<ProgressRadial width="w-5" />
 		{:else}
 			Submit

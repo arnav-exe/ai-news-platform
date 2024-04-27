@@ -34,9 +34,9 @@
             
             return;
         }
-        else if (password !== confirmPassword) {
+        if (password !== confirmPassword) {
             notMatchingError = true;
-            
+    
             return;
         }
 
