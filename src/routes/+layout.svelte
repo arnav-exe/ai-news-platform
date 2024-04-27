@@ -20,7 +20,7 @@
 	let loggedIn = false; // user logged in tracker (for dynamic content updation)
 	let initials = "";
 
-	const nonAuthRoutes = ["/", "/login", "/signup"]; // routes that ARE allowed to be visited by unauthenticated users
+	const nonAuthRoutes = ["/", "/login", "/signup"]; // routes that CAN be accessed unauthenticated users
 
 	onMount(_ => {
 		console.log("Mounting");
@@ -43,7 +43,7 @@
 				return;
 			}
 
-			if (user && currentPath !== "/") { // if user is logged in, redirect to main
+			if (user && (currentPath === "/login" || currentPath === "/signup")) { // if user is logged in, redirect to main
 				window.location.href = "/";
 			}
 			
@@ -75,6 +75,9 @@
 			// setting initials for profile avatar
 			initials = docSnapshot.data().firstName[0] + docSnapshot.data().lastName[0];
 
+			console.log("USER IS LOGGED IN:", loggedIn)
+
+
 			authStore.update((curr) => {
 				return {
 					...curr, // spread current data incase there is anything extra
@@ -94,9 +97,9 @@
 		placement: "bottom"
 	};
 					
-
-	const testFunc1 = _ => {
-		console.log("ACCESSING ACCOUNT SETTINGS");
+	// direct to account settings page
+	const btnAccountSettings = _ => {
+		window.location.href = "/account-settings";
 	}
 
 	// toast noti metadata
@@ -106,6 +109,7 @@
         background: 'variant-filled-primary'
     };
 
+	// log user out
 	const btnLogout = _ => {
 		authHandlers.logout();
 		loggedIn = false;
@@ -136,7 +140,7 @@
 					<div class="card p-4" data-popup="popupClick">
 						<nav class="list-nav">
 							<ul>
-								<li><a on:click={testFunc1} href="/"><span class="flex-auto">Account Settings</span></a></li>
+								<li><a on:click={btnAccountSettings} href="/"><span class="flex-auto">Account Settings</span></a></li>
 								<li><a on:click={btnLogout} href="/"><span class="flex-auto">Logout</span></a></li>
 							</ul>
 						</nav>
