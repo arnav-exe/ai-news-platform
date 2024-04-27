@@ -23,7 +23,6 @@
 	const nonAuthRoutes = ["/", "/login", "/signup"]; // routes that CAN be accessed unauthenticated users
 
 	onMount(_ => {
-		console.log("Mounting");
 		const unsubscribe = auth.onAuthStateChanged(async user => { // listens to state changes (login, logout, register. etc.)
 
 			const currentPath = window.location.pathname;
@@ -67,16 +66,12 @@
 				await setDoc(userReference, dataToSetStore, { merge: true });
 			}
 			else { // if user document DOES exist
-				console.log("Fetching user");
 				const userData = docSnapshot.data();
 				dataToSetStore = userData;
 			}
 		
 			// setting initials for profile avatar
 			initials = docSnapshot.data().firstName[0] + docSnapshot.data().lastName[0];
-
-			console.log("USER IS LOGGED IN:", loggedIn)
-
 
 			authStore.update((curr) => {
 				return {

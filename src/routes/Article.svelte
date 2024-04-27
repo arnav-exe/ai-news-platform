@@ -98,7 +98,7 @@
             {:else}
                 <p>{articleBody}</p>
                 <br>
-                <a href="{$drawerStore.meta.articleURL}" class="variant-soft-secondary bg-transparent underline">Link to the original article -></a>
+                <a href="{$drawerStore.meta.articleURL}" class="variant-soft-secondary bg-transparent underline">Link to the original article -&gt;</a>
             {/if}
         </div>
     </Drawer>
