@@ -21,13 +21,7 @@
 		const unsubscribe = auth.onAuthStateChanged(async user => { // listens to state changes (login, logout, register. etc.)
 			console.log("user:")
 			console.log(user)
-			authStore.update(curr => {
-				return {
-					...curr,
-					isLoading: false,
-					currentUser: user
-				};
-			});
+
 			const currentPath = window.location.pathname;
 
 			if (!user && !nonAuthRoutes.includes(currentPath)) { // if user is NOT logged in
@@ -44,6 +38,10 @@
 
 				return;
 			}
+
+			if (user && currentPath !== "/") { // if user is logged in, redirect to main
+				window.location.href = "/";
+			}
 			
 			let dataToSetStore; // user data to save to context store
 
@@ -54,13 +52,12 @@
 			loggedIn = true;
 
 			if (!docSnapshot.exists()) { // if users document does NOT exist
-				console.log("Creating user")
+				console.log("Creating users collection")
 				const userReference = doc(db, "users", user.uid);
-				
+
 				dataToSetStore = {
-					email: user.email,
-					displayName: user.displayName,
-					initials: user.initials
+					email: user.email, // user email
+					newsPrefs: [] // preferred news categories
 				};
 
 				await setDoc(userReference, dataToSetStore, { merge: true });
@@ -71,10 +68,9 @@
 				dataToSetStore = userData;
 			}
 
-			console.log("curr object inside authStore.update():")
-			console.log(user)
-			authStore.update(curr => {
-				
+			console.log("authStore:")
+			console.log(authStore)
+			authStore.update((curr) => {
 				return {
 					...curr, // spread current data incase there is anything extra
 					user: user, // user in context
@@ -87,8 +83,6 @@
 	});
 
 
-
-	
 
 	const popupClick = {
 		event: "click",

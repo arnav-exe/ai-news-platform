@@ -4,7 +4,8 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } f
 
 export const authStore = writable({
     user: null,
-    loading: true
+    loading: true,
+    data: {}
 })
 
 export const authHandlers = {
