@@ -58,9 +58,11 @@
 				console.log("Creating users collection")
 				const userReference = doc(db, "users", user.uid);
 
+				console.log("NEWS PREFS:", docSnapshot.data().newsPrefs)
+
 				dataToSetStore = {
 					email: user.email, // user email
-					newsPrefs: [] // preferred news categories
+					// newsPrefs: docSnapshot.data().newsPrefs
 				};
 
 				await setDoc(userReference, dataToSetStore, { merge: true });
@@ -78,6 +80,7 @@
 					...curr, // spread current data incase there is anything extra
 					user: user, // user in context
 					loading: false, // userdata has now been loaded
+					newsPrefs: docSnapshot.data().newsPrefs
 				};
 			});
 		});

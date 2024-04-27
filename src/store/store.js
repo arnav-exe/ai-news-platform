@@ -6,7 +6,7 @@ import { doc, setDoc } from "firebase/firestore"
 export const authStore = writable({
     user: null,
     loading: true,
-    data: {}
+    newsPrefs: {}
 })
 
 export const authHandlers = {
@@ -21,7 +21,15 @@ export const authHandlers = {
                 firstName: firstName,
                 lastName: lastName,
                 email: email,
-                newsPrefs: []
+                newsPrefs: { // default news category preferences for new users
+                    general: true,
+                    business: false,
+                    entertainment: false,
+                    health: false,
+                    science: false,
+                    sports: false,
+                    technology: false
+                }
             });
         } catch (error) {
             console.log("adding additional user data failed")
