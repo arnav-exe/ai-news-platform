@@ -2,25 +2,29 @@
 	import '../app.postcss';
 	import { onMount } from 'svelte';
 	import { auth, db } from "../lib/firebase/firebase"
-	import { AppShell, AppBar, Avatar, LightSwitch, storePopup, popup } from '@skeletonlabs/skeleton';
+	import { AppShell, AppBar, Avatar, LightSwitch, storePopup, popup, initializeStores, Toast, getToastStore } from '@skeletonlabs/skeleton';
 
 	// Floating UI for Popups
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
 	
     import { doc, getDoc, setDoc } from 'firebase/firestore';
-	import { authStore } from "../store/store"
+	import { authHandlers, authStore } from "../store/store"
 	
+	// popup config
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 
+	// init toast noti stores
+    initializeStores();
+	const toastStore = getToastStore();
+
 	let loggedIn = false; // user logged in tracker (for dynamic content updation)
+	let initials = "";
 
 	const nonAuthRoutes = ["/", "/login", "/signup"]; // routes that ARE allowed to be visited by unauthenticated users
 
 	onMount(_ => {
 		console.log("Mounting");
 		const unsubscribe = auth.onAuthStateChanged(async user => { // listens to state changes (login, logout, register. etc.)
-			console.log("user:")
-			console.log(user)
 
 			const currentPath = window.location.pathname;
 
@@ -67,15 +71,15 @@
 				const userData = docSnapshot.data();
 				dataToSetStore = userData;
 			}
+		
+			// setting initials for profile avatar
+			initials = docSnapshot.data().firstName[0] + docSnapshot.data().lastName[0];
 
-			console.log("authStore:")
-			console.log(authStore)
 			authStore.update((curr) => {
 				return {
 					...curr, // spread current data incase there is anything extra
 					user: user, // user in context
-					loading: false // userdata has now been loaded
-					// data: dataToSetStore // user data
+					loading: false, // userdata has now been loaded
 				};
 			});
 		});
@@ -95,12 +99,24 @@
 		console.log("ACCESSING ACCOUNT SETTINGS");
 	}
 
-	const testFunc2 = _ => {
-		console.log("LOGGING OUT");
+	// toast noti metadata
+	const toastData = {
+        message: 'Logged out successfully!',
+        timeout: 5000,
+        background: 'variant-filled-primary'
+    };
+
+	const btnLogout = _ => {
+		authHandlers.logout();
+		loggedIn = false;
+
+		// toast noti confirming logout
+		toastStore.trigger(toastData);
 	}
 </script>
 
-					
+<!-- toast noti instance (singleton pattern) -->
+<Toast />
 
 <!-- App Shell -->
 <AppShell>
@@ -115,13 +131,13 @@
 
 				{#if loggedIn}
 					<button use:popup={popupClick}>
-						<Avatar initials="AJ" background="bg-primary-500" border="border-4 border-surface-300-600-token hover:!border-primary-500" cursor="cursor-pointer" />
+						<Avatar initials="{initials}" background="bg-primary-500" border="border-4 border-surface-300-600-token hover:!border-primary-500" cursor="cursor-pointer" />
 					</button>
 					<div class="card p-4" data-popup="popupClick">
 						<nav class="list-nav">
 							<ul>
 								<li><a on:click={testFunc1} href="/"><span class="flex-auto">Account Settings</span></a></li>
-								<li><a on:click={testFunc2} href="/"><span class="flex-auto">Logout</span></a></li>
+								<li><a on:click={btnLogout} href="/"><span class="flex-auto">Logout</span></a></li>
 							</ul>
 						</nav>
 					</div>

@@ -44,7 +44,7 @@
 
         // attempting signup
         try {
-            await authHandlers.signup(email, password) 
+            await authHandlers.signup(email, password, firstName, lastName) 
         } catch (error) {
             console.log("Auth Error: ", error);
             authError = true;
