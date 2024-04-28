@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import path from "path"
 import { scrapeArticleImg, scrapeArticleBody } from "./scraper.js";
 
 const app = express();
@@ -40,6 +41,12 @@ app.get("/api/article/body", async(req, res) => {
     catch (error) {
         res.status(500).json({ error : "Could not get article body." });
     }
+});
+
+app.get("/images/placeholder.png", (req, res) => {
+    const imgPath = "C:\\Users\\avij4\\Desktop\\QMUL Archive\\Final Year Project\\ai-news-platform\\static\\card-placeholder.png"
+    console.log(imgPath);
+    res.sendFile(imgPath);
 });
 
 // start server

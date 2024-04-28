@@ -28,15 +28,20 @@
 
     let categories = {};
 
+    
+    let selectedCategory;
+
     onMount(_ => {
         authStore.subscribe(curr => {
             categories = curr.newsPrefs;
+
+            for (const key in categories) {
+                if (categories[key] === true) {
+                    selectedCategory = key;
+                }
+            }
         });
     })
-
-    const toggle = category => {
-        categories[category] = ! categories[category];
-    }
 
     const btnSaveCategories = _ => {
         toastStore.trigger(toastData);
@@ -68,13 +73,14 @@
 
         <span class="w-full my-4">
         <p class="mt-4">Preferred news categories</p>
+
         {#each Object.keys(categories) as c}
             <button
-                class="chip {categories[c] ? 'variant-filled' : 'variant-soft'} m-2"
-                on:click={() => { toggle(c); }}
+                class="chip {selectedCategory === c ? 'variant-filled' : 'variant-soft'} m-2"
+                on:click={() => { selectedCategory = c; }}
                 on:keypress
             >
-                {#if categories[c]}<span>✓</span>{/if}
+                {#if selectedCategory === c}<span>✓</span>{/if}
                 <span class="capitalize">{c}</span>
             </button>
         {/each}

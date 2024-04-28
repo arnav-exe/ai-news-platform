@@ -27,7 +27,7 @@ const scrapeArticleBody = async url => {
     await page.goto(decodeURIComponent(url));
     
     let childElements = await page.evaluate(_ => {
-        const elements = Array.from(document.querySelectorAll('[data-component="text-block"]'));
+        const elements = Array.from(document.querySelectorAll('p'));
 
         return elements.map(e => e.innerText);
     })

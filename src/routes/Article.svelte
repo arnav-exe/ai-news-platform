@@ -1,13 +1,32 @@
 <script>
     import { onMount } from "svelte";
-    import { Drawer, getDrawerStore, initializeStores, ProgressRadial } from '@skeletonlabs/skeleton';
+    import { Drawer, getDrawerStore, initializeStores, ProgressRadial, getToastStore } from '@skeletonlabs/skeleton';
+    import { authHandlers, authStore } from "../store/store";
+
+
+    const toastStore = getToastStore();
+    const toastData = {
+        message: 'Updated successfully!',
+        timeout: 5000,
+        background: 'variant-filled-success'
+    };
+
+    let categories = {};
+    let selectedCategory; // default category if user is NOT logged in
+    $: API_URL = (selectedCategory ? `https://saurav.tech/NewsAPI/top-headlines/category/${selectedCategory}/gb.json` : `https://saurav.tech/NewsAPI/top-headlines/category/general/gb.json`);
+    console.log(API_URL)
+
+    $: {
+        if (API_URL) {
+            (async () => {
+                await fetchArticles();
+            })();
+        }
+    }
+
     
 
-
-    let pageNo = 1;
-
     const API_KEY = import.meta.env.VITE_NEWSAPI_KEY;
-    $: API_URL = `https://newsapi.org/v2/top-headlines?language=en?page=${pageNo}&apiKey=${API_KEY}`;
     
     let articles = [];
 
@@ -21,7 +40,8 @@
             const res = await fetch(`http://localhost:3000/api/article/img?url=${encodeURIComponent(url)}`);
             
             if (!res.ok) { // if fails to fetch from endpoint
-                throw new Error("Failed to fetch article thumbnail. Please reload the page and try again.");
+                // throw new Error("Failed to fetch article thumbnail. Please reload the page and try again.");
+                articleThumbnails[url] = "http://localhost:3000/images/placeholder.png";
             }
             else { // if succeed
                 const data = await res.json();
@@ -29,6 +49,7 @@
             }
         }
         catch (error) {
+            articleThumbnails[url] = "http://localhost:3000/images/placeholder.png";
             console.error(error);
         }
     }
@@ -69,15 +90,34 @@
         }
     }
 
+
+
+    
+
+    const saveCategories = async _ => {
+        toastStore.trigger(toastData);
+
+        await authHandlers.updatePrefs(categories);
+    }
+
+
     onMount(async _ => {
+
+        authStore.subscribe(curr => {
+            categories = curr.newsPrefs;
+
+            for (const key in categories) {
+                if (categories[key] === true) {
+                    selectedCategory = key;
+                }
+            }
+        });
 
         // fetching articles
         await fetchArticles();
         if (!articles) {
             console.log("Error. no articles fetched.")
         }
-        console.log(articles.articles)
-        
 
         // loop through articles to get thumbnails for all null values
         for (const article of articles.articles) {
@@ -100,6 +140,13 @@
 
     // calling facebook/bart-large-cnn from huggingface inference API
     const query = async data => {
+        data = {
+            "inputs": data,
+            "parameters": {
+                "min_length": 50
+            }
+        };
+
         try {
             const response = await fetch(
                 "https://api-inference.huggingface.co/models/facebook/bart-large-cnn",
@@ -167,7 +214,27 @@
         </div>
     </Drawer>
     
+
+    <!-- news category selectors -->
+    {#if categories}
+        <div class="flex justify-center flex-1">
+            {#each Object.keys(categories) as c}
+                <button
+                    class="chip {selectedCategory === c ? 'variant-filled' : 'variant-soft'} m-2"
+                    on:click={() => { selectedCategory = c; saveCategories()}}
+                    on:keypress
+                >
+                    {#if selectedCategory === c}<span>✓</span>{/if}
+                    <span class="capitalize">{c}</span>
+                </button>
+            {/each}
+        </div>
+    {/if}
+
+
+
     <!-- article cards -->
+    {#key API_URL}
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-8 m-8 justify-items-center items-center">
         {#if articles.articles && articles.articles.length > 0}
             {#each articles.articles as article}
@@ -182,7 +249,7 @@
                     </header>
                     <div class="p-4 space-y-4">
                         {#if article.source.name}
-                            <img src="../../{article.source.name}.png" class="max-w-12 h-auto" alt="{article.source.name}">
+                            <!-- <img src="../../{article.source.name}.png" class="max-w-12 h-auto" alt="{article.source.name}"> -->
                         {/if}
                         <h3 class="h3 text-left" data-toc-ignore>{removeTrail(article.title)}</h3>
                     </div>
@@ -196,19 +263,11 @@
                 </div>
             </button>
             {/each}
-
-            <!-- next page option -->
-            <span>
-                {#if pageNo > 1}
-                    <button on:click={_ => {pageNo--}} class="button variant-soft-secondary bg-transparent underline m-2">&lt;- Previous Page</button>
-                {/if}
-                <button on:click={_ => {pageNo++}} class="button variant-soft-secondary bg-transparent underline m-2">Next Page -&gt;</button>
-            </span>
-
         {:else}
         <div />
 		<ProgressRadial width="w-10" />
 
         {/if}
     </div>
+    {/key}
 </div>
