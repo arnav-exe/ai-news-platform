@@ -96,6 +96,16 @@
     const saveCategories = async _ => {
         toastStore.trigger(toastData);
 
+        for (const key in categories) {
+            if (Object.hasOwnProperty.call(categories, key)) {
+                categories[key] = false;
+            }
+        }
+
+        categories[selectedCategory] = true;
+
+        console.log(categories);
+
         await authHandlers.updatePrefs(categories);
     }
 
@@ -108,6 +118,7 @@
             for (const key in categories) {
                 if (categories[key] === true) {
                     selectedCategory = key;
+                    console.log(categories)
                 }
             }
         });

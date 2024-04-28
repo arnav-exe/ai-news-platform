@@ -26,29 +26,6 @@
         toastStore.trigger(toastData);
     }
 
-    let categories = {};
-
-    
-    let selectedCategory;
-
-    onMount(_ => {
-        authStore.subscribe(curr => {
-            categories = curr.newsPrefs;
-
-            for (const key in categories) {
-                if (categories[key] === true) {
-                    selectedCategory = key;
-                }
-            }
-        });
-    })
-
-    const btnSaveCategories = _ => {
-        toastStore.trigger(toastData);
-
-        authHandlers.updatePrefs(categories);
-    }
-
 </script>
 
 {#if !$authStore.loading}
@@ -71,27 +48,7 @@
             </div>
         </label>
 
-        <span class="w-full my-4">
-        <p class="mt-4">Preferred news categories</p>
-
-        {#each Object.keys(categories) as c}
-            <button
-                class="chip {selectedCategory === c ? 'variant-filled' : 'variant-soft'} m-2"
-                on:click={() => { selectedCategory = c; }}
-                on:keypress
-            >
-                {#if selectedCategory === c}<span>✓</span>{/if}
-                <span class="capitalize">{c}</span>
-            </button>
-        {/each}
-
-        <button on:click={btnSaveCategories} class="chip variant-soft-secondary m-2">
-            <span>Save</span>
-        </button>
-        
-        </span>
-
-        <a class="variant-soft-secondary bg-transparent underline" href="/">&lt;- Back to home</a>
+        <a class="variant-soft-secondary bg-transparent underline m-8" href="/">&lt;- Back to home</a>
     </div>
 {/if}
 
