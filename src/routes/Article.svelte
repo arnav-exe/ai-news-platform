@@ -91,8 +91,6 @@
 
 
 
-    
-
     const saveCategories = async _ => {
         toastStore.trigger(toastData);
 
@@ -101,10 +99,7 @@
                 categories[key] = false;
             }
         }
-
         categories[selectedCategory] = true;
-
-        console.log(categories);
 
         await authHandlers.updatePrefs(categories);
     }

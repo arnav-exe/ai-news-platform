@@ -1,7 +1,6 @@
 <script>
-    import { authHandlers, authStore } from "../../store/store";
+    import { authStore } from "../../store/store";
     import { getToastStore } from "@skeletonlabs/skeleton";
-    import { onMount } from "svelte";
 
 	// init toast noti stores
     const toastStore = getToastStore();		
@@ -16,13 +15,12 @@
     };
 
     const btnUpdateEmail = _ => {
-        // PERFORM REGEX VERIFICATION ON EMAIL FIRST
-        // authHandlers.updateEmail(newEmail);
+        authHandlers.updateEmail(newEmail);
         toastStore.trigger(toastData);
     }
 
     const btnUpdatePswd = _ => {
-        // authHandlers.updatePassword(newPswd);
+        authHandlers.updatePassword(newPswd);
         toastStore.trigger(toastData);
     }
 
