@@ -70,15 +70,6 @@
     }
 
     onMount(async _ => {
-
-        // SCRAPE FROM API_URL HERE INSTEAD OF CALLING FROM DATA.JSON
-        // CODE HERE
-        // await fetchArticles();
-        // if (!articles) {
-        //     console.log("Error. no articles fetched.")
-        // }
-        // console.log(articles.articles)
-
         articles.articles = json["articles"]; // dummy data imported from "data.json"
         
 

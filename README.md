@@ -12,6 +12,7 @@
 
 ### TODO:
  * make all anchor tags darker shade of blue on mouse press down
+ * **IMPORTANT**: TEST PROJECT IN 4 HOURS TIME (19:30) WHEN NEWSAPI QUOTA RESETS (TEST THAT PAGINATION WORKS)
  * find a way to change config of facebook NLP model
  * include supplementary images in articles?
  * reflect changes made to user preferences in newsAPI call
