@@ -67,5 +67,23 @@ export const authHandlers = {
             return;
         }
         await sendPasswordResetEmail(auth, email);
+    },
+
+    updatePrefs: async prefs => {
+        const user = auth.currentUser;
+
+        try {
+            const docReference = doc(db, "users", user.uid);
+            
+            try {
+                await setDoc(docReference, { newsPrefs: prefs }, { merge: true });
+            }
+            catch (error) {
+                console.log("ERROR UPDATING USER PREFS:", error);
+            }
+        }
+        catch (error) {
+            console.log("USER ERROR:", error);
+        }
     }
 }

@@ -1,5 +1,5 @@
 <script>
-    import { authStore } from "../../store/store";
+    import { authHandlers, authStore } from "../../store/store";
     import { getToastStore } from "@skeletonlabs/skeleton";
     import { onMount } from "svelte";
 
@@ -40,6 +40,8 @@
 
     const btnSaveCategories = _ => {
         toastStore.trigger(toastData);
+
+        authHandlers.updatePrefs(categories);
     }
 
 </script>
