@@ -66,7 +66,7 @@
 		{/if}
 	</button>
 
-	<a href="/reset-password" class="button variant-soft-secondary bg-transparent underline">Forgot Password?</a>
+	<a href="/reset-password" class="variant-soft-secondary bg-transparent underline">Forgot Password?</a>
 
 </div>
 

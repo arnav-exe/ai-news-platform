@@ -1,11 +1,14 @@
 <script>
     import { onMount } from "svelte";
-    import { Drawer, getDrawerStore, initializeStores } from '@skeletonlabs/skeleton';
+    import { Drawer, getDrawerStore, initializeStores, ProgressRadial } from '@skeletonlabs/skeleton';
+    
 
-    import json from './data.json';
+
+    let pageNo = 1;
 
     const API_KEY = import.meta.env.VITE_NEWSAPI_KEY;
-    const API_URL = `https://newsapi.org/v2/top-headlines?language=en&apiKey=${API_KEY}`;
+    $: API_URL = `https://newsapi.org/v2/top-headlines?language=en?page=${pageNo}&apiKey=${API_KEY}`;
+    // const API_URL = "";
     
     let articles = [];
 
@@ -85,6 +88,16 @@
         }
     });
 
+
+    
+    // format article title
+    const removeTrail = str => {
+        const i = str.lastIndexOf(" - ");
+        if (i !== -1) {
+            return str.slice(0, i)
+        }
+        return str;
+    }
 
     // calling facebook/bart-large-cnn from huggingface inference API
     const query = async data => {
@@ -167,7 +180,7 @@
                         {#if article.source.name}
                             <img src="../../{article.source.name}.png" class="max-w-12 h-auto" alt="{article.source.name}">
                         {/if}
-                        <h3 class="h3 text-left" data-toc-ignore>{article.title}</h3>
+                        <h3 class="h3 text-left" data-toc-ignore>{removeTrail(article.title)}</h3>
                     </div>
                     <hr class="opacity-50" />
                     <footer class="p-4 flex justify-start items-center space-x-4">
@@ -179,8 +192,19 @@
                 </div>
             </button>
             {/each}
+
+            <!-- next page option -->
+            <span>
+                {#if pageNo > 1}
+                    <button on:click={_ => {pageNo--}} class="button variant-soft-secondary bg-transparent underline m-2">&lt;- Previous Page</button>
+                {/if}
+                <button on:click={_ => {pageNo++}} class="button variant-soft-secondary bg-transparent underline m-2">Next Page -&gt;</button>
+            </span>
+
         {:else}
-        <p>LOADING...</p>
+        <div />
+		<ProgressRadial width="w-10" />
+
         {/if}
     </div>
 </div>

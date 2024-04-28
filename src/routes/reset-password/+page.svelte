@@ -56,7 +56,7 @@
 		{/if}
 	</button>
 
-	<a href="/login" class="button variant-soft-secondary bg-transparent underline">&lt;- Back to login page</a>
+	<a href="/login" class="variant-soft-secondary bg-transparent underline">&lt;- Back to login page</a>
 </div>
 
 <style>
