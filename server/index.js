@@ -44,10 +44,17 @@ app.get("/api/article/body", async(req, res) => {
 });
 
 app.get("/images/placeholder.png", (req, res) => {
-    const imgPath = "C:\\Users\\avij4\\Desktop\\QMUL Archive\\Final Year Project\\ai-news-platform\\static\\card-placeholder.png"
-    console.log(imgPath);
-    res.sendFile(imgPath);
+    const placeholderPath = "C:\\Users\\avij4\\Desktop\\QMUL Archive\\Final Year Project\\ai-news-platform\\static\\card-placeholder.png"
+    console.log(placeholderPath);
+    res.sendFile(placeholderPath);
 });
+
+app.get("/images/src.png", (req, res) => {
+    const srcPath = "C:\\Users\\avij4\\Desktop\\QMUL Archive\\Final Year Project\\ai-news-platform\\static\\src.png"
+    console.log(srcPath);
+    res.sendFile(srcPath);
+});
+
 
 // start server
 app.listen(port, _ => {

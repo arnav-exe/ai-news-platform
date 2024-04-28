@@ -25,6 +25,8 @@ const scrapeArticleBody = async url => {
     const page = await browser.newPage();
 
     await page.goto(decodeURIComponent(url));
+
+    await page.waitForSelector("p");
     
     let childElements = await page.evaluate(_ => {
         const elements = Array.from(document.querySelectorAll('p'));

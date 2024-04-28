@@ -14,7 +14,6 @@
     let categories = {};
     let selectedCategory; // default category if user is NOT logged in
     $: API_URL = (selectedCategory ? `https://saurav.tech/NewsAPI/top-headlines/category/${selectedCategory}/gb.json` : `https://saurav.tech/NewsAPI/top-headlines/category/general/gb.json`);
-    console.log(API_URL)
 
     $: {
         if (API_URL) {
@@ -140,18 +139,12 @@
 
     // calling facebook/bart-large-cnn from huggingface inference API
     const query = async data => {
-        data = {
-            "inputs": data,
-            "parameters": {
-                "min_length": 50
-            }
-        };
-
         try {
             const response = await fetch(
                 "https://api-inference.huggingface.co/models/facebook/bart-large-cnn",
                 {
                     headers: { Authorization: "Bearer " + import.meta.env.VITE_HF_KEY },
+                    maxBodyLength: Infinity,
                     method: "POST",
                     body: JSON.stringify(data),
                 }
@@ -242,14 +235,14 @@
                 <div class="card card-hover overflow-hidden max-w-2xl aspect-auto">
                     <header>
                         {#if !article.urlToImage}
-                            <img src="{articleThumbnails[article.url]}" class="bg-black/50 w-full height-auto aspect-[16/9]" alt="article thumbnail" />
+                            <img src="{articleThumbnails[article.url]}" class="bg-black/50 w-full height-auto aspect-[16/9]" alt="article thumbnail" on:error={e => {e.target.src = "http://localhost:3000/images/placeholder.png"}} />
                         {:else}
                             <img src="{article.urlToImage}" class="bg-black/50 w-full height-auto aspect-[16/9]" alt="article thumbnail" />
                         {/if}
                     </header>
                     <div class="p-4 space-y-4">
                         {#if article.source.name}
-                            <!-- <img src="../../{article.source.name}.png" class="max-w-12 h-auto" alt="{article.source.name}"> -->
+                            <img src="../../{article.source.name}.png" class="max-w-8 h-auto" alt="{article.source.name}" on:error={e => {e.target.src = "http://localhost:3000/images/src.png"}}>
                         {/if}
                         <h3 class="h3 text-left" data-toc-ignore>{removeTrail(article.title)}</h3>
                     </div>
