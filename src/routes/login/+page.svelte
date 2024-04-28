@@ -8,7 +8,7 @@
 	let authenticating = false;
 
 	// invalid input error tracker
-	let emptyError = false;
+	let invalidError = false;
 	let doesNotExistError = false;
 
 	const authenticator = async _ => {
@@ -16,11 +16,11 @@
 			return;
 		}
 
-		emptyError = false;
+		invalidError = false;
 		doesNotExistError = false;
 
 		if (!email || !password) { // if any field is left blank
-			emptyError = true;
+			invalidError = true;
 
 			return;
 		}
@@ -33,6 +33,7 @@
 		} catch (error) {
 			console.log("Auth error: ", error);
 			doesNotExistError = true;
+			authenticating = false;
 		}
 	}
 </script>
@@ -51,21 +52,21 @@
 		<input bind:value={password} class="input" title="Input (password)" type="password" placeholder="password" />
 	</label>
 
-	{#if emptyError}
+	{#if invalidError}
 	<p class="variant-soft-primary">ERROR! Invalid email or password. Please try again.</p>
 	{:else if doesNotExistError}
 	<p class="variant-soft-primary">ERROR! User does not exist. Please create an account first.</p>
 	{/if}
 
-	<br>
-
-	<button type="button" on:click={authenticator} class="btn variant-filled-primary">
-		{#if authenticating && !emptyError && !doesNotExistError}
+	<button type="button" on:click={authenticator} class="btn variant-filled-primary m-4">
+		{#if authenticating && !invalidError && !doesNotExistError}
 			<ProgressRadial width="w-5" />
 		{:else}
 			Submit
 		{/if}
 	</button>
+
+	<a href="/reset-password" class="button variant-soft-secondary bg-transparent underline">Forgot Password?</a>
 
 </div>
 

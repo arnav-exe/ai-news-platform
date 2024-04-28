@@ -20,7 +20,7 @@
 	let loggedIn = false; // user logged in tracker (for dynamic content updation)
 	let initials = "";
 
-	const nonAuthRoutes = ["/", "/login", "/signup"]; // routes that CAN be accessed unauthenticated users
+	const nonAuthRoutes = ["/", "/login", "/signup", "/reset-password"]; // routes that CAN be accessed unauthenticated users
 
 	onMount(_ => {
 		const unsubscribe = auth.onAuthStateChanged(async user => { // listens to state changes (login, logout, register. etc.)

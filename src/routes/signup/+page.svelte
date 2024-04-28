@@ -15,10 +15,7 @@
     let notMatchingError = false;
     let authError = false;
 
-    setTimeout(_ => {
-
-    }, 1000);
-
+    
 
     const authenticator = async _ => {
         if(authenticating) { // prevent user from spam-clicking authenticate
@@ -48,6 +45,7 @@
         } catch (error) {
             console.log("Auth Error: ", error);
             authError = true;
+            authenticating = false;
         }
     }
 </script>
