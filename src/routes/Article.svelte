@@ -8,7 +8,6 @@
 
     const API_KEY = import.meta.env.VITE_NEWSAPI_KEY;
     $: API_URL = `https://newsapi.org/v2/top-headlines?language=en?page=${pageNo}&apiKey=${API_KEY}`;
-    // const API_URL = "";
     
     let articles = [];
 
@@ -71,8 +70,7 @@
 
     onMount(async _ => {
 
-        // SCRAPE FROM API_URL HERE INSTEAD OF CALLING FROM DATA.JSON
-        // CODE HERE
+        // fetching articles
         await fetchArticles();
         if (!articles) {
             console.log("Error. no articles fetched.")
