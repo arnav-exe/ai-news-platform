@@ -14,5 +14,5 @@
  * make all anchor tags darker shade of blue on mouse press down
  * include supplementary images in articles?
  * pass article body through facebook NLP model for summarization
- * look into using EITHER [async library](https://github.com/caolan/async) OR [web workers](https://www.npmjs.com/package/webworker-threads) to parallel process the for loop that gets the article thumbnails
+ * look into using EITHER [async library](https://github.com/caolan/async) OR [web workers](https://www.npmjs.com/package/webworker-threads) to parallel process the _for loop_ that gets the article thumbnails
  * **COMMENT EVERYTHING**

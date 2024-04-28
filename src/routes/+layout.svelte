@@ -126,7 +126,7 @@
 		<!-- App Bar -->
 		<AppBar>
 			<svelte:fragment slot="lead">
-				<a href="/"><strong class="text-xl uppercase">TL;DR NEWS</strong></a>
+				<a href="/"><strong class="text-xl uppercase p-1">TL;DR NEWS</strong></a>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
 				<LightSwitch />

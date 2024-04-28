@@ -8,10 +8,11 @@
     const API_URL = `https://newsapi.org/v2/top-headlines?sources?apiKey=${API_KEY}`;
     
     let articles = [];
-    let loading = true; // loading state to manage placeholders
 
     let articleThumbnails = {}; // store article thumbnail URLs (with ID so they can be appropriately referenced)
-    let articleBody = ""; // article body
+    let articleBody; // article body
+
+
 
     const fetchArticleImg = async url => { // fetch article thumbnail from pptr webscraper
         try {
@@ -39,8 +40,8 @@
             }
             else { // if succeed
                 const data = await res.json();
-                articleBody = data.join("\n");
-                loading = false; // disable loading state since article data been fetched
+
+                articleBody = await summarize(data.join("\n"));
             }
         }
         catch (error) {
@@ -49,7 +50,6 @@
     }
 
     const articleFetchButtonHandler = async url => {
-        loading = true;
         fetchArticleBody(url);
     }
 
@@ -64,6 +64,33 @@
             await fetchArticleImg(article.url);
         }
     });
+
+
+    // calling facebook/bart-large-cnn from huggingface inference API
+    const query = async data => {
+        const response = await fetch(
+            "https://api-inference.huggingface.co/models/facebook/bart-large-cnn",
+            {
+                headers: { Authorization: "Bearer " + import.meta.env.VITE_HF_KEY },
+                method: "POST",
+                body: JSON.stringify(data),
+            }
+        );
+        const result = await response.json();
+        return result;
+    }
+
+    const summarize = async body => {
+        if (body) {
+            query({"inputs": body}).then((response) => {
+                articleBody = response[0].summary_text;
+
+                return;
+            });
+        }
+    }
+
+
 
     initializeStores();
     let drawerStore = getDrawerStore();
@@ -87,11 +114,11 @@
     <Drawer>
         <div class="p-4">
             <h1 class="h1 p-10">{$drawerStore.meta.articleTitle}</h1>
-            {#if loading}
+            {#if !articleBody}
                 <section class="card w-full">
                     <div class="p-4 space-y-4">
                         {#each {length: 10} as _}
-                        <div class="placeholder animate-pulse" />
+                            <div class="placeholder animate-pulse" />
                         {/each}
                     </div>
                 </section>
