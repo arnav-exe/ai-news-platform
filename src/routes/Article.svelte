@@ -8,7 +8,6 @@
 
     const API_KEY = import.meta.env.VITE_NEWSAPI_KEY;
     $: API_URL = `https://newsapi.org/v2/top-headlines?language=en?page=${pageNo}&apiKey=${API_KEY}`;
-    // const API_URL = "";
     
     let articles = [];
 
@@ -35,6 +34,7 @@
     }
 
     const fetchArticleBody = async url => { // fetch article data from pptr webscraper
+        articleBody = "";
         try {
             const res = await fetch(`http://localhost:3000/api/article/body?url=${encodeURIComponent(url)}`);
             
@@ -94,6 +94,7 @@
 
     // calling facebook/bart-large-cnn from huggingface inference API
     const query = async data => {
+        try {
         const response = await fetch(
             "https://api-inference.huggingface.co/models/facebook/bart-large-cnn",
             {
@@ -104,6 +105,10 @@
         );
         const result = await response.json();
         return result;
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
 
     const summarize = async body => {
