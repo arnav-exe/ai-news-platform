@@ -2,7 +2,7 @@
     import { onMount } from "svelte";
     import { Drawer, getDrawerStore, initializeStores, ProgressRadial } from '@skeletonlabs/skeleton';
     
-
+    import json from './data.json';
 
     let pageNo = 1;
 
@@ -73,11 +73,13 @@
 
         // SCRAPE FROM API_URL HERE INSTEAD OF CALLING FROM DATA.JSON
         // CODE HERE
-        await fetchArticles();
-        if (!articles) {
-            console.log("Error. no articles fetched.")
-        }
-        console.log(articles.articles)
+        // await fetchArticles();
+        // if (!articles) {
+        //     console.log("Error. no articles fetched.")
+        // }
+        // console.log(articles.articles)
+
+        articles.articles = json["articles"]; // dummy data imported from "data.json"
         
 
         // loop through articles to get thumbnails for all null values
