@@ -174,6 +174,24 @@
         }
     }
 
+    const fetchArticleLogo = async img => {
+        img = img.replace(" ", "%20");
+        let imgPath = `http://localhost:3000/images/${img}.png`;
+
+        try {
+            const res = await fetch(imgPath);
+            if (!res.ok) {
+                throw new Error("Failed to fetch article logo.");
+            }
+            return imgPath; // Return the image URL if it exists
+        } catch (error) {
+            console.error("Error fetching article logo:", error);
+            // If fetch fails, return the URL of the default image
+            return "http://localhost:3000/images/src.png";
+        }
+    }
+
+
 
 
     initializeStores();
@@ -249,7 +267,13 @@
                     </header>
                     <div class="p-4 space-y-4">
                         {#if article.source.name}
-                            <img src="../../{article.source.name}.png" class="max-w-8 h-auto" alt="{article.source.name}" on:error={e => {e.target.src = "http://localhost:3000/images/src.png"}}>
+                            {#await fetchArticleLogo(article.source.name)}
+                                <img src="http://localhost:3000/images/src.png" class="max-w-8 h-auto" alt="{article.source.name}">
+                            {:then logoUrl}
+                                <img src={logoUrl} class="max-w-8 h-auto" alt="{article.source.name}">
+                            {:catch}
+                                <img src="http://localhost:3000/images/src.png" class="max-w-8 h-auto" alt="{article.source.name}">
+                            {/await}
                         {/if}
                         <h3 class="h3 text-left" data-toc-ignore>{removeTrail(article.title)}</h3>
                     </div>

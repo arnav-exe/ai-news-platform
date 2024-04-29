@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import path from "path"
 import { scrapeArticleImg, scrapeArticleBody } from "./scraper.js";
 
 const app = express();
@@ -43,17 +42,8 @@ app.get("/api/article/body", async(req, res) => {
     }
 });
 
-app.get("/images/placeholder.png", (req, res) => {
-    const placeholderPath = "C:\\Users\\avij4\\Desktop\\QMUL Archive\\Final Year Project\\ai-news-platform\\static\\card-placeholder.png"
-    console.log(placeholderPath);
-    res.sendFile(placeholderPath);
-});
-
-app.get("/images/src.png", (req, res) => {
-    const srcPath = "C:\\Users\\avij4\\Desktop\\QMUL Archive\\Final Year Project\\ai-news-platform\\static\\src.png"
-    console.log(srcPath);
-    res.sendFile(srcPath);
-});
+// Serving static files from a directory
+app.use("/images", express.static("C:\\Users\\avij4\\Desktop\\QMUL Archive\\Final Year Project\\ai-news-platform\\static\\"));
 
 
 // start server

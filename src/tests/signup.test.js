@@ -46,3 +46,15 @@ describe("Signup page", _ => {
         expect(window.location.pathname).toBe("/");
     });
 });
+
+
+
+
+
+
+
+
+
+
+
+
