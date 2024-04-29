@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint .",
-    "test": "vitest"
+    "test": "vitest --coverage"
   },
   "devDependencies": {
     "@skeletonlabs/skeleton": "2.9.0",
