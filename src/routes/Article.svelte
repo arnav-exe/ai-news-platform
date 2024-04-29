@@ -4,6 +4,7 @@
     import { authHandlers, authStore } from "../store/store";
 
 
+    initializeStores();
     const toastStore = getToastStore();
     const toastData = {
         message: 'Updated successfully!',

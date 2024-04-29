@@ -4,16 +4,16 @@ import { render } from "@testing-library/svelte";
 
 import Signup from "../routes/signup/+page.svelte";
 
-describe("Signup page", () => {
-    it("renders the signup form with input fields and submit button", () => {
-        const { getByPlaceholderText, getByText } = render(Signup);
+describe("Signup page", _ => {
+    it("renders the signup form with input fields and submit button", _ => {
+        const { getByRole, getByPlaceholderText, getByText } = render(Signup);
         
-        const firstNameInput = getByPlaceholderText("first name");
-        const lastNameInput = getByPlaceholderText("last name");
-        const emailInput = getByPlaceholderText("john@example.com");
+        const firstNameInput = getByRole("textbox", { name: "First Name" });
+        const lastNameInput = getByRole("textbox", { name: "Last Name" });
+        const emailInput = getByRole("textbox", { name: "Email" });
         const passwordInput = getByPlaceholderText("password");
         const confirmPasswordInput = getByPlaceholderText("confirm password");
-        const submitButton = getByText("Submit");
+        const submitButton = getByText("Submit", { selector: "button" });
         
         expect(firstNameInput).toBeInTheDocument();
         expect(lastNameInput).toBeInTheDocument();

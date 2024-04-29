@@ -4,12 +4,12 @@ import { render } from "@testing-library/svelte";
 
 import ResetPswd from "../routes/reset-password/+page.svelte";
 
-describe("Reset password page", () => {
-    it("renders the reset password form with input fields and submit button", () => {
+describe("Reset password page", _ => {
+    it("renders the reset password form with input email field and submit button", _ => {
         const { getByPlaceholderText, getByText } = render(ResetPswd);
         
         const emailInput = getByPlaceholderText("john@example.com");
-        const submitButton = getByText("Submit");
+        const submitButton = getByText("Submit", { selector: "button" });
         const backToLogin = getByText("<- Back to login page");
         
         expect(emailInput).toBeInTheDocument();

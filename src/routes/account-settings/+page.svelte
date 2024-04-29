@@ -1,8 +1,9 @@
 <script>
     import { authStore } from "../../store/store";
-    import { getToastStore } from "@skeletonlabs/skeleton";
+    import { getToastStore, initializeStores } from "@skeletonlabs/skeleton";
 
 	// init toast noti stores
+    initializeStores();
     const toastStore = getToastStore();		
 
     let newEmail;
