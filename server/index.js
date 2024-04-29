@@ -49,7 +49,7 @@ app.get("/api/article/body", async(req, res) => {
 app.use("/images", express.static("C:\\Users\\avij4\\Desktop\\QMUL Archive\\Final Year Project\\ai-news-platform\\static\\"));
 
 
-// start server
+// start server on port 3000
 app.listen(port, _ => {
     console.log(`Server is running on port ${port}`);
 });

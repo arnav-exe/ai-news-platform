@@ -4,12 +4,12 @@ import { getAuth } from "firebase/auth";
 
 // firebase configuration keys
 const firebaseConfig = {
-    apiKey: import.meta.env.VITE_APIKEY,
-    authDomain: import.meta.env.VITE_AUTHDOMAIN,
-    projectId: import.meta.env.VITE_PROJECTID,
-    storageBucket: import.meta.env.VITE_STORAGEBUCKET,
-    messagingSenderId: import.meta.env.VITE_MESSAGINGSENDERID,
-    appId: import.meta.env.VITE_APPID
+    apiKey: "AIzaSyDLMrZ4fF7j0_k8wWuMqcmk_O7Hl1AAdz8",
+    authDomain: "ai-news-platform.firebaseapp.com",
+    projectId: "ai-news-platform",
+    storageBucket: "ai-news-platform.appspot.com",
+    messagingSenderId: "412587066714",
+    appId: "1:412587066714:web:bda8c66cc3a1c1b9529f63"
 };
 
 // init firebase

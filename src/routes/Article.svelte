@@ -168,7 +168,7 @@
             const response = await fetch(
                 "https://api-inference.huggingface.co/models/facebook/bart-large-cnn",
                 {
-                    headers: { Authorization: "Bearer " + import.meta.env.VITE_HF_KEY },
+                    headers: { Authorization: "Bearer " + "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" },
                     maxBodyLength: Infinity,
                     method: "POST",
                     body: JSON.stringify(data),
@@ -231,7 +231,7 @@
 </script>
 
 <div class="container">
-    <!-- article drawer -->
+    <!-- article drawer (singleton pattern) -->
     <Drawer>
         <div class="p-4">
             <!-- article header -->
