@@ -18,16 +18,19 @@
 	const toastStore = getToastStore();
 
 	let loggedIn = false; // user logged in tracker (for dynamic content updation)
-	let initials = "";
+	let initials = ""; // initials for profile avatar
 
-	const nonAuthRoutes = ["/", "/login", "/signup", "/reset-password"]; // routes that CAN be accessed unauthenticated users
+	// routes that CAN be accessed unauthenticated users
+	const nonAuthRoutes = ["/", "/login", "/signup", "/reset-password"];
 
+	// on mount (check if user is logged in)
 	onMount(_ => {
 		const unsubscribe = auth.onAuthStateChanged(async user => { // listens to state changes (login, logout, register. etc.)
 
 			const currentPath = window.location.pathname;
 
-			if (!user && !nonAuthRoutes.includes(currentPath)) { // if user is NOT logged in
+			// if user is NOT logged in
+			if (!user && !nonAuthRoutes.includes(currentPath)) {
 				// this means user is tryng to access authorized route
 				// deny access
 				window.location.href = "/";
@@ -36,13 +39,15 @@
 				return;
 			}
 
+			// if user is NOT logged in
 			if (!user) {
 				loggedIn = false;
 
 				return;
 			}
 
-			if (user && (currentPath === "/login" || currentPath === "/signup")) { // if user is logged in, redirect to main
+			// if user is logged in, redirect to main
+			if (user && (currentPath === "/login" || currentPath === "/signup")) {
 				window.location.href = "/";
 			}
 			
@@ -54,17 +59,17 @@
 
 			loggedIn = true;
 
-			if (!docSnapshot.exists()) { // if users document does NOT exist
+			// if users document does NOT exist
+			if (!docSnapshot.exists()) {
 				console.log("Creating users collection")
 				const userReference = doc(db, "users", user.uid);
 
-				console.log("NEWS PREFS:", docSnapshot.data().newsPrefs)
-
+				// data to set in user document
 				dataToSetStore = {
 					email: user.email, // user email
-					// newsPrefs: docSnapshot.data().newsPrefs
 				};
 
+				// set user document
 				await setDoc(userReference, dataToSetStore, { merge: true });
 			}
 			else { // if user document DOES exist
@@ -72,15 +77,16 @@
 				dataToSetStore = userData;
 			}
 		
-			// setting initials for profile avatar
+			// calcing initials for profile avatar
 			initials = docSnapshot.data().firstName[0] + docSnapshot.data().lastName[0];
 
+			// update context store
 			authStore.update((curr) => {
 				return {
-					...curr, // spread current data incase there is anything extra
+					...curr, // spread current data incase theres anything extra
 					user: user, // user in context
 					loading: false, // userdata has now been loaded
-					newsPrefs: docSnapshot.data().newsPrefs
+					newsPrefs: docSnapshot.data().newsPrefs // user news preferences
 				};
 			});
 		});
@@ -88,7 +94,7 @@
 	});
 
 
-
+	// popup config
 	const popupClick = {
 		event: "click",
 		target: "popupClick",
@@ -100,10 +106,10 @@
 		window.location.href = "/account-settings";
 	}
 
-	// toast noti metadata
+	// toast noti config
 	const toastData = {
         message: 'Logged out successfully!',
-        timeout: 5000,
+        timeout: 5000, // ms
         background: 'variant-filled-primary'
     };
 
@@ -131,10 +137,13 @@
 			<svelte:fragment slot="trail">
 				<LightSwitch />
 
+				<!-- dynamic content based on user login status -->
 				{#if loggedIn}
 					<button use:popup={popupClick}>
 						<Avatar initials="{initials}" background="bg-primary-500" border="border-4 border-surface-300-600-token hover:!border-primary-500" cursor="cursor-pointer" />
 					</button>
+
+					<!-- popup menu of account options-->
 					<div class="card p-4" data-popup="popupClick">
 						<nav class="list-nav">
 							<ul>
@@ -143,6 +152,8 @@
 							</ul>
 						</nav>
 					</div>
+
+				<!-- if user is NOT logged in -->
 				{:else if !loggedIn}
 					<a href="/login" type="button" background="bg-primary-500" class="btn variant-filled-primary">Login</a>
 					<a href="/signup" type="button" background="bg-primary-500" class="btn variant-filled-secondary">Signup</a>

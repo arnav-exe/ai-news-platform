@@ -15,12 +15,6 @@ const firebaseConfig = {
 // init firebase
 let firebaseApp;
 
-// if (location.hostname === "localhost") {
-//     config = {
-//         databaseURL: "http://localhost:4000?ns=emulatorui",
-//     }
-// }
-
 if (!getApps().length) { // good
     firebaseApp = initializeApp(firebaseConfig);
 }
