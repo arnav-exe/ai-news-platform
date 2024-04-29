@@ -6,7 +6,7 @@ import Main from "../routes/Article.svelte";
 
 describe("Main page", _ => {
     it("renders preloader while articles are still loading", _ => {
-        const { getAllByRole, getByTestId } = render(Main);
+        const { getByTestId } = render(Main);
 
         const preloader = getByTestId("progress-radial");
 

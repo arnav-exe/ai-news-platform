@@ -6,5 +6,8 @@ export default defineConfig({
 	plugins: [sveltekit(), purgeCss()],
 	test: {
 		environment: "jsdom",
+	},
+	server: {
+		port: 1337
 	}
 });
