@@ -43,7 +43,7 @@ export const authHandlers = {
         await signInWithEmailAndPassword(auth, email, pswd);
     },
 
-    logout: async _ => { // log out user
+    logout: async () => { // log out user
         await signOut(auth);
     },
 

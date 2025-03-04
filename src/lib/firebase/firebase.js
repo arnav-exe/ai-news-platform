@@ -15,10 +15,10 @@ const firebaseConfig = {
 // init firebase
 let firebaseApp;
 
-if (!getApps().length) { // good
+if (!getApps().length) {
     firebaseApp = initializeApp(firebaseConfig);
 }
-else { // bad
+else {
     firebaseApp = getApp();
     deleteApp(firebaseApp);
     firebaseApp = initializeApp(firebaseConfig);

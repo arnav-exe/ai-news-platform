@@ -67,6 +67,17 @@
 				// data to set in user document
 				dataToSetStore = {
 					email: user.email, // user email
+					firstName: "Guest",
+					lastName: "User",
+					newsPrefs: {
+						general: true,
+						business: false,
+						entertainment: false,
+						health: false,
+						science: false,
+						sports: false,
+						technology: false
+					}
 				};
 
 				// set user document

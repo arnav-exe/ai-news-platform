@@ -50,7 +50,7 @@
         try {
             await authHandlers.signup(email, password, firstName, lastName) 
         } catch (error) { // if signup auth fails
-            console.log("Auth Error: ", error);
+            console.error("Auth Error: ", error);
             authError = true;
             authenticating = false;
         }

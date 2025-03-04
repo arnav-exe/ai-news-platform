@@ -168,10 +168,18 @@
             const response = await fetch(
                 "https://api-inference.huggingface.co/models/facebook/bart-large-cnn",
                 {
-                    headers: { Authorization: "Bearer " + "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" },
-                    maxBodyLength: Infinity,
+                    headers: {
+                        Authorization: `Bearer ${import.meta.env.VITE_HF_KEY}`,
+                        "Content-Type": "application/json"
+                    },
                     method: "POST",
-                    body: JSON.stringify(data),
+                    body: JSON.stringify({
+                        inputs: body,
+                        parameters: { // attach params to req
+                            temperature: 0.9, // more randomness (0-1)
+                            repetition_penalty: 1.2 // reduce repetition
+                        }
+                    }),
                 }
             );
             const result = await response.json();
@@ -179,8 +187,11 @@
         }
         catch (error) { // if fails
             console.log(error);
+            return body.substring(0, 300) + "..."; // return first 300 chars of unsummarized article body as fallback
         }
     }
+
+    
 
     // summarize wrapper function
     const summarize = async body => {

@@ -10,7 +10,7 @@ const scrapeArticleImg = async url => {
     // wait for img to load
     await page.waitForSelector("img");
 
-    let articleImg = await page.evaluate(_ => {
+    let articleImg = await page.evaluate(() => {
         const img = document.querySelector("img"); // selects first img element
 
         // return img src (if img exists, else return null)
@@ -33,7 +33,7 @@ const scrapeArticleBody = async url => {
     // wait for p elements to load
     await page.waitForSelector("p");
     
-    let childElements = await page.evaluate(_ => {
+    let childElements = await page.evaluate(() => {
         const elements = Array.from(document.querySelectorAll('p')); // selects all paragraph elements
 
         // return innerText of each paragraph element

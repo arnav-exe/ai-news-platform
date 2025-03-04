@@ -1,9 +1,9 @@
 <script>
-    import { authStore } from "../../store/store";
+    import { authStore, authHandlers } from "../../store/store";
     import { getToastStore, initializeStores } from "@skeletonlabs/skeleton";
 
 	// init toast noti stores
-    initializeStores();
+    // initializeStores();
     const toastStore = getToastStore();		
 
     // vars to bind input fields to
@@ -25,8 +25,19 @@
 
     // update password auth handler
     const btnUpdatePswd = _ => {
-        authHandlers.updatePassword(newPswd);
+        console.log("1");
+        try {
+            console.log("2");
+            authHandlers.updatePassword(newPswd);
+            console.log("3");
+        }
+        catch (err) {
+            console.log(err);
+        }
+        console.log("4");
         toastStore.trigger(toastData);
+        console.log("5");
+
     }
 
 </script>

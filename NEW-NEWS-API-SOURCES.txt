@@ -1,0 +1,3 @@
+https://newsapi.org/
+https://newsdata.io/
+https://www.thenewsapi.com/
