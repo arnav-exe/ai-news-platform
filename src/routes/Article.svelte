@@ -19,7 +19,7 @@
     $: userLoggedIn = $authStore.user !== null; // flag to keep track of user login status
 
     let categories = {};
-    let selectedCategory = "";
+    let selectedCategory = "general";
     let searchQuery = "";
     let pageSize = 20;
     let page = 1;
@@ -27,14 +27,15 @@
     let toDate = "";
     let language = "en";
 
-    $: API_URL = buildAPIURL();
+    $: API_URL = buildAPIURL(selectedCategory, searchQuery, pageSize, page);
 
-    const buildAPIURL = _ => {
-        let url = "https://newsapi.org/v2/top-headlines?";
+    const buildAPIURL = (selectedCategory, searchQuery, pageSize, page) => {
+        // let url = "https://newsapi.org/v2/top-headlines?";
+        let url = "https://api.com/top-headlines?";
         
         url += `language=${language}&`;
 
-        if (selectedCategory && selectedCategory !== "general") {
+        if (selectedCategory) {
             url += `category=${selectedCategory}&`;
         }
 
@@ -307,17 +308,18 @@
 
     <!-- filter controls -->
     {#if userLoggedIn}
-        <div class="card p-4 m-4">
+    <div class="m-4 p-4">
+        <div class="flex justify-center">
             <h3 class="h3 mb-4">Filter Articles</h3>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <!-- Search query -->
                 <label class="label">
-                    <span>Search Keywords</span>
+                    <span>Search Term</span>
                     <input 
                         type="text" 
                         bind:value={searchQuery} 
-                        placeholder="Enter keywords..." 
+                        placeholder="Enter Search Term..." 
                         class="input"
                     />
                 </label>
@@ -328,8 +330,9 @@
                     <select bind:value={pageSize} class="select">
                         <option value={10}>10</option>
                         <option value={20}>20</option>
+                        <option value={30}>30</option>
+                        <option value={40}>40</option>
                         <option value={50}>50</option>
-                        <option value={100}>100</option>
                     </select>
                 </label>
                 
@@ -341,10 +344,8 @@
                 </div>
             </div>
         </div>
-    {/if}
 
     <!-- news category selectors -->
-    {#if userLoggedIn && categories}
         <div class="flex justify-center flex-1">
             {#each Object.keys(categories) as c} <!-- loop through categories -->
                 <!-- style each category chip button --> 
@@ -358,6 +359,7 @@
                 </button>
             {/each}
         </div>
+    </div>
     {/if}
 
 

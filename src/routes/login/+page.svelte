@@ -11,7 +11,7 @@
 
 	// invalid input error tracker
 	let invalidError = false;
-	let doesNotExistError = false;
+	let incorrectPswdError = false;
 
 	// main auth function
 	const authenticator = async _ => {
@@ -21,7 +21,7 @@
 
 		// reset error trackers
 		invalidError = false;
-		doesNotExistError = false;
+		incorrectPswdError = false;
 
 		if (!email || !password) { // if any field is left blank
 			invalidError = true;
@@ -37,7 +37,7 @@
 			await authHandlers.login(email, password)
 		} catch (error) { // if login auth fails
 			console.log("Auth error: ", error);
-			doesNotExistError = true;
+			incorrectPswdError = true;
 			authenticating = false;
 		}
 	}
@@ -60,15 +60,13 @@
 	</label>
 
 	<!-- error messages based on type of error -->
-	{#if invalidError}
+	{#if invalidError || incorrectPswdError}
 	<p class="variant-soft-primary">ERROR! Invalid email or password. Please try again.</p>
-	{:else if doesNotExistError}
-	<p class="variant-soft-primary">ERROR! User does not exist. Please create an account first.</p>
 	{/if}
 
 	<!-- submit button -->
 	<button type="button" on:click={authenticator} class="btn variant-filled-primary m-4">
-		{#if authenticating && !invalidError && !doesNotExistError}
+		{#if authenticating && !invalidError && !incorrectPswdError}
 			<ProgressRadial width="w-5" />
 		{:else}
 			Submit
