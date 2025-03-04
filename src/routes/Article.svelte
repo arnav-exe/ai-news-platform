@@ -16,11 +16,66 @@
         background: 'variant-filled-success'
     };
 
+    $: userLoggedIn = $authStore.user !== null; // flag to keep track of user login status
+
     let categories = {};
-    let selectedCategory;
-    
+    let selectedCategory = "";
+    let searchQuery = "";
+    let pageSize = 20;
+    let page = 1;
+    let fromDate = "";
+    let toDate = "";
+    let language = "en";
+
+    $: API_URL = buildAPIURL();
+
+    const buildAPIURL = _ => {
+        let url = "https://newsapi.org/v2/top-headlines?";
+        
+        url += `language=${language}&`;
+
+        if (selectedCategory && selectedCategory !== "general") {
+            url += `category=${selectedCategory}&`;
+        }
+
+        if (searchQuery) {
+            url += `q=${encodeURIComponent(searchQuery)}&`;
+        }
+        
+        url += `pageSize=${pageSize}&`;
+        url += `page=${page}&`;
+
+        url += `apiKey=${import.meta.env.VITE_NEWSAPI_KEY}`
+
+        return url;
+    }
+    $: asdfasdf1 = `Current page: ${page}`;
+    $: asdfasdf2 = `API URL: ${API_URL}`;
+
+    const nextPage = _ => {
+        if (articles.totalResults > page * pageSize) {
+            page++;
+            fetchArticles(); // force refetch on page change
+        }
+    }
+
+    const prevPage = _ => {
+        if (page > 1) {
+            page--;
+            fetchArticles(); // force refetch on page change
+        }
+    }
+
+    const resetFilters = _ => {
+        searchQuery = "";
+        pageSize = 20;
+        page = 1;
+        fromDate = "";
+        toDate = "";
+    }
+
     // API URL based on if a category has value
-    $: API_URL = (selectedCategory ? `https://saurav.tech/NewsAPI/top-headlines/category/${selectedCategory}/gb.json` : `https://saurav.tech/NewsAPI/top-headlines/category/general/gb.json`);
+    // $: API_URL = (selectedCategory ? `https://saurav.tech/NewsAPI/top-headlines/category/${selectedCategory}/gb.json` : `https://saurav.tech/NewsAPI/top-headlines/category/general/gb.json`);
 
     // re-fetch articles when category changes (dynamically updates)
     $: {
@@ -31,10 +86,6 @@
         }
     }
 
-    
-
-    const API_KEY = import.meta.env.VITE_NEWSAPI_KEY;
-    
     let articles = [];
 
     let articleThumbnails = {}; // store article thumbnail URLs (with ID so they can be appropriately referenced)
@@ -95,14 +146,14 @@
                 throw new Error("Failed to fetch data.");
             }
             // if succeeds
-            articles = await articleRes.json();
+            const data = await articleRes.json();
+            console.log("NEWSAPI Response", data); // log newsapi response
+            articles = data;
         }
         catch (error) { // if fails
             console.log("Error. Failed to fetch articles from NewsAPI:", error)
         }
     }
-
-
 
     // save user news category preferences
     const saveCategories = async _ => {
@@ -120,7 +171,6 @@
         // pass to auth handler to update user prefs
         await authHandlers.updatePrefs(categories);
     }
-
 
     onMount(async _ => {
         // subscribe to news category preferences auth store
@@ -144,14 +194,12 @@
 
         // loop through articles to get thumbnails for all null values
         for (const article of articles.articles) {
-            if (!articles.articles.urlToImage) { // if null value
+            if (!article.urlToImage) { // if null value
                 await fetchArticleImg(article.url); // fetch thumbnail from backend
             }
         }
     });
 
-
-    
     // format article title (removes trailing " - " and everything after it)
     const removeTrail = str => {
         const i = str.lastIndexOf(" - "); // find last index of " - "
@@ -173,13 +221,7 @@
                         "Content-Type": "application/json"
                     },
                     method: "POST",
-                    body: JSON.stringify({
-                        inputs: body,
-                        parameters: { // attach params to req
-                            temperature: 0.9, // more randomness (0-1)
-                            repetition_penalty: 1.2 // reduce repetition
-                        }
-                    }),
+                    body: JSON.stringify(data)
                 }
             );
             const result = await response.json();
@@ -190,8 +232,6 @@
             return body.substring(0, 300) + "..."; // return first 300 chars of unsummarized article body as fallback
         }
     }
-
-    
 
     // summarize wrapper function
     const summarize = async body => {
@@ -220,8 +260,6 @@
         }
     }
 
-
-
     initializeStores();
     let drawerStore = getDrawerStore(); // get drawer store (for opening article drawer)
 
@@ -242,6 +280,8 @@
 </script>
 
 <div class="container">
+    <p>{asdfasdf1}</p>
+    <p>{asdfasdf2}</p>
     <!-- article drawer (singleton pattern) -->
     <Drawer>
         <div class="p-4">
@@ -265,8 +305,46 @@
     </Drawer>
     
 
+    <!-- filter controls -->
+    {#if userLoggedIn}
+        <div class="card p-4 m-4">
+            <h3 class="h3 mb-4">Filter Articles</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Search query -->
+                <label class="label">
+                    <span>Search Keywords</span>
+                    <input 
+                        type="text" 
+                        bind:value={searchQuery} 
+                        placeholder="Enter keywords..." 
+                        class="input"
+                    />
+                </label>
+                
+                <!-- Results per page -->
+                <label class="label">
+                    <span>Results Per Page</span>
+                    <select bind:value={pageSize} class="select">
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
+                        <option value={50}>50</option>
+                        <option value={100}>100</option>
+                    </select>
+                </label>
+                
+                <!-- Reset filters button -->
+                <div class="flex items-end">
+                    <button class="btn variant-filled-primary" on:click={resetFilters}>
+                        Reset Filters
+                    </button>
+                </div>
+            </div>
+        </div>
+    {/if}
+
     <!-- news category selectors -->
-    {#if categories}
+    {#if userLoggedIn && categories}
         <div class="flex justify-center flex-1">
             {#each Object.keys(categories) as c} <!-- loop through categories -->
                 <!-- style each category chip button --> 
@@ -285,7 +363,7 @@
 
 
     <!-- article cards -->
-    {#key API_URL} <!-- refresh block if changes to API_URL are detected -->
+    {#key API_URL + page} <!-- refresh block if changes to API_URL are detected -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-8 m-8 justify-items-center items-center">
         {#if articles.articles && articles.articles.length > 0} <!-- if articles have loaded -->
             {#each articles.articles as article}
@@ -293,9 +371,9 @@
                 <div class="card card-hover overflow-hidden max-w-2xl aspect-auto">
                     <header>
                         {#if !article.urlToImage} <!-- if no thumbnail URL from API, fetch myself from backend -->
-                            <img src="{articleThumbnails[article.url]}" class="bg-black/50 w-full height-auto aspect-[16/9]" alt="article thumbnail" on:error={e => {e.target.src = "http://localhost:3000/images/placeholder.png"}} />
+                            <img src="{articleThumbnails[article.url]}" class="bg-black/50 w-full height-auto aspect-[16/9]" alt="article thumbnail" on:error={e => {e.target.src = "http://localhost:3000/images/card-placeholder.png"}} />
                         {:else} <!-- otherwise use API method to get thumbnail -->
-                            <img src="{article.urlToImage}" class="bg-black/50 w-full height-auto aspect-[16/9]" alt="article thumbnail" />
+                            <img src="{article.urlToImage}" class="bg-black/50 w-full height-auto aspect-[16/9]" alt="article thumbnail" on:error={e => {e.target.src = "http://localhost:3000/images/card-placeholder.png"}} />
                         {/if}
                     </header>
                     <div class="p-4 space-y-4">
@@ -326,4 +404,29 @@
         {/if}
     </div>
     {/key}
+
+    <!-- Pagination controls -->
+    {#if articles.totalResults && articles.totalResults > pageSize}
+    <div class="flex justify-center my-4 gap-4">
+        <button 
+            class="btn variant-filled-primary" 
+            on:click={prevPage} 
+            disabled={page === 1}
+        >
+            Previous
+        </button>
+        
+        <span class="flex items-center">
+            Page {page} of {Math.ceil(articles.totalResults / pageSize)}
+        </span>
+        
+        <button 
+            class="btn variant-filled-primary" 
+            on:click={nextPage} 
+            disabled={page >= Math.ceil(articles.totalResults / pageSize)}
+        >
+            Next
+        </button>
+    </div>
+    {/if}
 </div>

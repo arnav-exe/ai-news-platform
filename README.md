@@ -11,3 +11,6 @@
 
 
 ### TODO:
+ * fix API_URL not reacting to page change
+ * test logged in user article filtering options to make sure they work
+ * try to add additional parameters to [huggingface summarizer model inferencing](https://huggingface.co/docs/api-inference/tasks/summarization?code=js)
