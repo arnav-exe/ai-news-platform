@@ -3,7 +3,6 @@
     import { Drawer, getDrawerStore, initializeStores, ProgressRadial, getToastStore } from '@skeletonlabs/skeleton';
     import { authHandlers, authStore } from "../store/store";
 
-
     // init stores
     initializeStores();
 
@@ -18,20 +17,20 @@
 
     $: userLoggedIn = $authStore.user !== null; // flag to keep track of user login status
 
+    // page state vars
     let categories = {};
     let selectedCategory = "general";
-    let searchQuery = "";
+    let searchBarValue = ""; // bind to search bar
+    let searchQuery = ""; // update API URL only when search btn is pressed
     let pageSize = 20;
     let page = 1;
-    let fromDate = "";
-    let toDate = "";
     let language = "en";
 
     $: API_URL = buildAPIURL(selectedCategory, searchQuery, pageSize, page);
 
     const buildAPIURL = (selectedCategory, searchQuery, pageSize, page) => {
-        // let url = "https://newsapi.org/v2/top-headlines?";
-        let url = "https://api.com/top-headlines?";
+        let url = "https://newsapi.org/v2/top-headlines?";
+        // let url = "https://api.com/top-headlines?"; // FOR TESTING
         
         url += `language=${language}&`;
 
@@ -50,9 +49,8 @@
 
         return url;
     }
-    $: asdfasdf1 = `Current page: ${page}`;
-    $: asdfasdf2 = `API URL: ${API_URL}`;
 
+    // pagination functions
     const nextPage = _ => {
         if (articles.totalResults > page * pageSize) {
             page++;
@@ -69,16 +67,12 @@
 
     const resetFilters = _ => {
         searchQuery = "";
+        searchBarValue = "";
         pageSize = 20;
         page = 1;
-        fromDate = "";
-        toDate = "";
     }
 
-    // API URL based on if a category has value
-    // $: API_URL = (selectedCategory ? `https://saurav.tech/NewsAPI/top-headlines/category/${selectedCategory}/gb.json` : `https://saurav.tech/NewsAPI/top-headlines/category/general/gb.json`);
-
-    // re-fetch articles when category changes (dynamically updates)
+    // re-fetch articles on API_URL change
     $: {
         if (API_URL) {
             (async () => {
@@ -87,7 +81,7 @@
         }
     }
 
-    let articles = [];
+    let articles = []; // store API response
 
     let articleThumbnails = {}; // store article thumbnail URLs (with ID so they can be appropriately referenced)
     let articleBody; // article body
@@ -174,7 +168,7 @@
     }
 
     onMount(async _ => {
-        // subscribe to news category preferences auth store
+        // get user news preferences
         authStore.subscribe(curr => {
             categories = curr.newsPrefs;
 
@@ -191,6 +185,10 @@
         await fetchArticles();
         if (!articles) { // if no articles fetched (error)
             console.log("Error. no articles fetched.")
+            // set totalResults to 0
+            articles = {
+                totalResults: 0
+            }
         }
 
         // loop through articles to get thumbnails for all null values
@@ -280,9 +278,8 @@
     }
 </script>
 
+
 <div class="container">
-    <p>{asdfasdf1}</p>
-    <p>{asdfasdf2}</p>
     <!-- article drawer (singleton pattern) -->
     <Drawer>
         <div class="p-4">
@@ -306,37 +303,48 @@
     </Drawer>
     
 
-    <!-- filter controls -->
+    <!-- news article filter controls -->
     {#if userLoggedIn}
-    <div class="m-4 p-4">
-        <div class="flex justify-center">
-            <h3 class="h3 mb-4">Filter Articles</h3>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <!-- Search query -->
-                <label class="label">
-                    <span>Search Term</span>
-                    <input 
-                        type="text" 
-                        bind:value={searchQuery} 
-                        placeholder="Enter Search Term..." 
-                        class="input"
-                    />
-                </label>
-                
-                <!-- Results per page -->
-                <label class="label">
-                    <span>Results Per Page</span>
+    <div class="flex flex-col xl:mx-52 lg:mx-32 md:mx-16 sm:mx-8 mx-4">
+        <div>
+            <!-- search query bar -->
+            <label class="label">
+                <span>Search Term</span>
+                <div class="input-group input-group-divider grid-cols-[10fr_1fr]">
+                    <input class="input" type="text" bind:value={searchBarValue} placeholder="Enter Search Term..." />
+                    <button class="variant-filled-primary" on:click={() => {searchQuery = searchBarValue}}>Search</button>
+                </div>
+            </label>
+        </div>
+        <div class="flex justify-between flex-wrap items-center">
+            <!-- news category selectors -->
+            <div class="flex justify-center flex-wrap m-4">
+                {#each Object.keys(categories) as c} <!-- loop through categories -->
+                    <!-- style each category chip button --> 
+                    <button
+                        class="chip {selectedCategory === c ? 'variant-filled' : 'variant-soft'} m-2"
+                        on:click={() => { selectedCategory = c; saveCategories()}}
+                        on:keypress
+                    >
+                        {#if selectedCategory === c}<span>✓</span>{/if} <!-- if selected, show checkmark -->
+                        <span class="capitalize">{c}</span>
+                    </button>
+                {/each}
+            </div>
+
+            <div class="flex justify-center">
+                <!-- results per page dropdown -->
+                <label class="label mr-4">
                     <select bind:value={pageSize} class="select">
-                        <option value={10}>10</option>
-                        <option value={20}>20</option>
-                        <option value={30}>30</option>
-                        <option value={40}>40</option>
-                        <option value={50}>50</option>
+                        <option value={10}>10 results per page</option>
+                        <option value={20}>20 results per page</option>
+                        <option value={30}>30 results per page</option>
+                        <option value={40}>40 results per page</option>
+                        <option value={50}>50 results per page</option>
                     </select>
                 </label>
-                
-                <!-- Reset filters button -->
+            
+                <!-- reset filters btn -->
                 <div class="flex items-end">
                     <button class="btn variant-filled-primary" on:click={resetFilters}>
                         Reset Filters
@@ -344,27 +352,11 @@
                 </div>
             </div>
         </div>
-
-    <!-- news category selectors -->
-        <div class="flex justify-center flex-1">
-            {#each Object.keys(categories) as c} <!-- loop through categories -->
-                <!-- style each category chip button --> 
-                <button
-                    class="chip {selectedCategory === c ? 'variant-filled' : 'variant-soft'} m-2"
-                    on:click={() => { selectedCategory = c; saveCategories()}}
-                    on:keypress
-                >
-                    {#if selectedCategory === c}<span>✓</span>{/if} <!-- if selected, show checkmark -->
-                    <span class="capitalize">{c}</span>
-                </button>
-            {/each}
-        </div>
     </div>
     {/if}
 
-
-
-    <!-- article cards -->
+    <!-- display article cards (only if API returns results) -->
+    {#if articles.totalResults > 0}
     {#key API_URL + page} <!-- refresh block if changes to API_URL are detected -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-8 m-8 justify-items-center items-center">
         {#if articles.articles && articles.articles.length > 0} <!-- if articles have loaded -->
@@ -407,28 +399,20 @@
     </div>
     {/key}
 
-    <!-- Pagination controls -->
+    <!-- pagination controls -->
     {#if articles.totalResults && articles.totalResults > pageSize}
     <div class="flex justify-center my-4 gap-4">
-        <button 
-            class="btn variant-filled-primary" 
-            on:click={prevPage} 
-            disabled={page === 1}
-        >
-            Previous
-        </button>
+        <button class="btn variant-filled-primary" on:click={prevPage} disabled={page === 1}>Previous</button>
         
-        <span class="flex items-center">
-            Page {page} of {Math.ceil(articles.totalResults / pageSize)}
-        </span>
+        <span class="flex items-center">Page {page} of {Math.ceil(articles.totalResults / pageSize)}</span>
         
-        <button 
-            class="btn variant-filled-primary" 
-            on:click={nextPage} 
-            disabled={page >= Math.ceil(articles.totalResults / pageSize)}
-        >
-            Next
-        </button>
+        <button class="btn variant-filled-primary" on:click={nextPage} disabled={page >= Math.ceil(articles.totalResults / pageSize)}>Next</button>
     </div>
+    {/if}
+    <!-- display no articles found text -->
+    {:else if articles.totalResults === 0}
+        <div class="container h-full mx-auto flex items-center flex-col p-8 w-3/5">
+            <p class="text-xl uppercase">NO ARTICLES FOUND</p>
+        </div>
     {/if}
 </div>
