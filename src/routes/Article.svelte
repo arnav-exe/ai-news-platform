@@ -312,7 +312,7 @@
     <Drawer>
         <div class="p-4">
             <!-- article header -->
-            <h1 class="h1 p-10">{$drawerStore.meta.articleTitle}</h1>
+            <h1 class="h1 p-10 leading-tight">{$drawerStore.meta.articleTitle}</h1>
             {#if !articleBody} <!-- if article body is not fetched -->
                 <!-- preloader elements -->
                 <section class="card w-full">
