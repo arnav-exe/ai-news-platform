@@ -211,6 +211,18 @@
     // calling facebook/bart-large-cnn from huggingface inference API
     const query = async data => {
         try {
+            const payload = {
+                inputs: data.inputs,
+                // model hyperparams
+                parameters: {
+                    min_length: 50, // min summary length
+                    max_length: 300, // max summary length
+                    temperature: 0.7, // discourage diverse and 'creative' outputs
+                    repetition_penalty: 1.2, // > 1 penalizes repetition
+                    length_penalty: 1.0, // discourage longer summaries
+                    no_repeat_ngram_size: 3, // avoid repeating trigrams
+                }
+            };
             // fetch summarized article body
             const response = await fetch(
                 "https://api-inference.huggingface.co/models/facebook/bart-large-cnn",
@@ -220,7 +232,7 @@
                         "Content-Type": "application/json"
                     },
                     method: "POST",
-                    body: JSON.stringify(data)
+                    body: JSON.stringify(payload)
                 }
             );
             const result = await response.json();
@@ -228,18 +240,34 @@
         }
         catch (error) { // if fails
             console.log(error);
-            return body.substring(0, 300) + "..."; // return first 300 chars of unsummarized article body as fallback
+            return [{summary_text: data.inputs.substring(0, 300) + "..."}]; 
         }
     }
 
     // summarize wrapper function
-    const summarize = async body => {
-        if (body) { // if body exists
-            query({"inputs": body}).then((response) => {
-                articleBody = response[0].summary_text; // set article body to summarized text
+    // const summarize = async body => {
+    //     if (body) { // if body exists
+    //         query({"inputs": body}).then((response) => {
+    //             articleBody = response[0].summary_text; // set article body to summarized text
 
-                return; // exit
-            });
+    //             return; // exit
+    //         });
+    //     }
+    // }
+    const summarize = async body => {
+        if (!body) {
+            return null
+        };
+
+        // fetch summarized text since body exists
+        try {
+            const response = await query({"inputs": body});
+            articleBody = response[0].summary_text;
+            return response[0].summary_text; // exit
+        }
+        catch (error) {
+            console.error("Summarization error:", error);
+            return "<i>(Failed to fetch summary. Displaying truncated article body)</i><br>" + body.substring(0, 300) + "...";
         }
     }
 
@@ -295,7 +323,7 @@
                     </div>
                 </section>
             {:else} <!-- if article body is fetched -->
-                <p>{articleBody}</p>
+                <p>{@html articleBody}</p>
                 <br>
                 <a href="{$drawerStore.meta.articleURL}" class="variant-soft-secondary bg-transparent underline">Link to the original article -&gt;</a>
             {/if}

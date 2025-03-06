@@ -11,4 +11,4 @@
 
 
 ### TODO:
- * try to add additional parameters to [huggingface summarizer model inferencing](https://huggingface.co/docs/api-inference/tasks/summarization?code=js)
+ * TEST WEB APP SUMMARIZATION FUNCTIONALITY. COULD NOT TEST YET CUZ I HIT NEWSAPI RATE LIMIT
