@@ -142,7 +142,6 @@
             }
             // if succeeds
             const data = await articleRes.json();
-            console.log("NEWSAPI Response", data); // log newsapi response
             articles = data;
         }
         catch (error) { // if fails
@@ -176,7 +175,6 @@
             for (const key in categories) {
                 if (categories[key] === true) {
                     selectedCategory = key;
-                    console.log(categories)
                 }
             }
         });

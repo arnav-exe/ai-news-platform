@@ -61,7 +61,6 @@
 
 			// if users document does NOT exist
 			if (!docSnapshot.exists()) {
-				console.log("Creating users collection")
 				const userReference = doc(db, "users", user.uid);
 
 				// data to set in user document

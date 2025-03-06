@@ -25,18 +25,13 @@
 
     // update password auth handler
     const btnUpdatePswd = _ => {
-        console.log("1");
         try {
-            console.log("2");
             authHandlers.updatePassword(newPswd);
-            console.log("3");
         }
         catch (err) {
             console.log(err);
         }
-        console.log("4");
         toastStore.trigger(toastData);
-        console.log("5");
 
     }
 
