@@ -45,6 +45,15 @@ export const authHandlers = {
 
     logout: async () => { // log out user
         await signOut(auth);
+        // update authstore
+        authStore.update(curr => {
+            return {
+                ...curr,
+                user: null,
+                loading: false,
+                newsPrefs: {}
+            }
+        });
     },
 
     updateEmail: async email => { // update user email

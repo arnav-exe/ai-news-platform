@@ -11,6 +11,9 @@
 	// invalid input error tracker
 	let error = false;
 
+	// track if password reset email was sent
+	let emailSent = false;
+
 	// main auth function
 	const btnResetPswd = async _ => {
 		if(authenticating) { // prevent user from spam-clicking authenticate
@@ -19,6 +22,7 @@
 
 		// reset error trackers
 		error = false;
+		emailSent = false;
 
 		if (!email) { // if email field is left blank
 			invalidError = true;
@@ -32,6 +36,8 @@
 		// attempting reset
 		try {
 			await authHandlers.resetPassword(email)
+			emailSent = true;
+			authenticating = false;
 		} catch (error) { // if reset auth fails
 			console.log("Failed to reset password: ", error);
 			error = true;
@@ -53,6 +59,10 @@
 	<!-- error messages -->
 	{#if error}
 	<p class="variant-soft-primary">ERROR! Failed to reset password.</p>
+	{/if}
+
+	{#if emailSent}
+	<p class="variant-soft-success">Password reset link sent successfully!</p>
 	{/if}
 
 	<!-- submit button -->
