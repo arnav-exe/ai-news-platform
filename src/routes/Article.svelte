@@ -225,7 +225,8 @@
             };
             // fetch summarized article body
             const response = await fetch(
-                "https://api-inference.huggingface.co/models/facebook/bart-large-cnn",
+                // "https://api-inference.huggingface.co/models/facebook/bart-large-cnn",
+                "https://router.huggingface.co/hf-inference/models/facebook/bart-large-cnn",
                 {
                     headers: {
                         Authorization: `Bearer ${import.meta.env.VITE_HF_KEY}`,
@@ -257,8 +258,7 @@
     const summarize = async body => {
         if (!body) {
             return null
-        };
-
+        }
         // fetch summarized text since body exists
         try {
             const response = await query({"inputs": body});
